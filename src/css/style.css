@@ -1,0 +1,278 @@
+:root {
+  --bg: #f4f1ea;
+  --panel-bg: #ffffff;
+  --ink: #2b2620;
+  --accent: #c65d2e;
+  --accent-ink: #ffffff;
+  --muted: #8a8272;
+  --border: #ddd6c7;
+  --warn: #b3401f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+#app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+}
+
+.chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.chip-custom {
+  margin-left: auto;
+}
+
+.bpm-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.bpm-control button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bpm-control button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#bpm-value {
+  font-size: 1.6rem;
+  font-weight: 600;
+  min-width: 3ch;
+  text-align: center;
+}
+
+.unit {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.figure-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.figure-tile.selected {
+  border-color: var(--accent);
+  background: #fbe9df;
+}
+
+.figure-img {
+  max-width: 100%;
+  height: 32px;
+  object-fit: contain;
+}
+
+.figure-name {
+  font-size: 0.75rem;
+  text-align: center;
+  color: var(--ink);
+}
+
+.pattern {
+  display: flex;
+  gap: 2px;
+}
+
+.pattern .cell {
+  width: 10px;
+  height: 20px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+
+.pattern .cell.attacco {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.pattern .cell.prolungamento {
+  background: #ecd2c0;
+}
+
+.pattern .cell.silenzio {
+  background: transparent;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-track {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  transition: background 0.15s;
+}
+
+.switch-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.15s;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--accent);
+}
+
+.switch input:checked + .switch-track::after {
+  transform: translateX(20px);
+}
+
+.switch-label {
+  font-weight: 600;
+}
+
+.start-panel {
+  text-align: center;
+}
+
+.warning {
+  color: var(--warn);
+  font-size: 0.9rem;
+  margin: 0 0 0.75rem;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.start-btn:disabled {
+  background: var(--border);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.placeholder-note {
+  color: var(--muted);
+  font-style: italic;
+}
+
+#game-config {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+#back-home {
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 1rem;
+}

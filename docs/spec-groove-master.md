@@ -35,6 +35,7 @@ Il sorteggio avveniva così: ogni sprite eseguiva
 `passa al costume (numero casuale tra 1 e N)` dove N dipendeva solo dal livello.
 I costumi 1–11 sono le figure ritmiche in ordine di difficoltà crescente; i costumi
 12–22 sono le stesse figure con la sillabazione stampata sotto (usate dal pulsante Tip).
+
 Lo sprite del 4° movimento ha una numerazione sfalsata: i suoi costumi 1–8
 corrispondono alle figure globali 3–10, perché sul quarto movimento le figure da due
 tempi sono escluse.
