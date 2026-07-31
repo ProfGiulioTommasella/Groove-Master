@@ -33,11 +33,15 @@ function renderScore() {
   for (const bar of currentSequence) {
     const barEl = document.createElement('div');
     barEl.className = 'bar';
+    // Fixed number of equal-width tracks (one per movement) so beat 1, 2, 3...
+    // always start at the same x position across every bar, regardless of
+    // which figure (and however oddly proportioned its image) fills a slot.
+    barEl.style.gridTemplateColumns = `repeat(${currentState.time}, 1fr)`;
     for (const cell of bar) {
       const figure = figureById(cell.figureId);
       const cellEl = document.createElement('div');
       cellEl.className = 'score-cell';
-      cellEl.style.flexGrow = String(cell.movements);
+      cellEl.style.gridColumn = `span ${cell.movements}`;
 
       const img = document.createElement('img');
       img.className = 'figure-img';
@@ -112,6 +116,7 @@ metronomeBtn.addEventListener('click', async () => {
   if (metronome.isRunning) {
     stopMetronome();
   } else {
+    stopListen();
     await metronome.start();
     metronomeBtn.textContent = '■ Stop';
   }
@@ -134,9 +139,11 @@ listenBtn.addEventListener('click', () => {
     stopListen();
     return;
   }
+  stopMetronome();
   const grid = sequenceToGrid(currentSequence);
   listenBtn.textContent = '■ Stop';
   listenController = playSequenceOnce(grid, currentState.bpm, {
+    countInBeats: currentState.time,
     onStep: highlightStep,
     onEnd: () => {
       listenController = null;

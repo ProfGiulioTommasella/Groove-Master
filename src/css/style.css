@@ -36,7 +36,24 @@ body {
 #app {
   max-width: 640px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 1.5rem 1rem 2.5rem;
+}
+
+.credit {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.35rem 0.75rem;
+  text-align: center;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: rgba(5, 8, 10, 0.85);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(2px);
 }
 
 h1 {
@@ -299,8 +316,8 @@ h1 {
 }
 
 .bar {
-  display: flex;
-  align-items: flex-end;
+  display: grid;
+  align-items: end;
   border-bottom: 2px solid var(--ink-dark);
   border-left: 2px solid var(--ink-dark);
   border-right: 2px solid var(--ink-dark);

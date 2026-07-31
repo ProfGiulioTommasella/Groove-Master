@@ -88,13 +88,21 @@ export function createMetronome(getBpm) {
   };
 }
 
-// Listen: plays the generated grid once as a plain rhythm (percussion on
-// every attack), highlighting the currently-sounding step via rAF reading
-// ctx.currentTime, never by counting frames (§6).
-export function playSequenceOnce(grid, bpm, { onStep, onEnd } = {}) {
+// Listen: plays a short pre-count (one higher-pitched click per movement of
+// the bar, so the player feels the tempo before it starts), then the
+// generated grid once as a plain rhythm (percussion on every attack),
+// highlighting the currently-sounding step via rAF reading ctx.currentTime,
+// never by counting frames (§6).
+export function playSequenceOnce(grid, bpm, { onStep, onEnd, countInBeats = 0 } = {}) {
   const ctx = getContext();
   const sixteenth = 15 / bpm;
-  const startAt = ctx.currentTime + 0.1;
+  const beat = 60 / bpm;
+  const preRollStart = ctx.currentTime + 0.1;
+  const startAt = preRollStart + countInBeats * beat;
+
+  for (let i = 0; i < countInBeats; i += 1) {
+    playSyntheticTick(ctx, preRollStart + i * beat, { frequency: 2600, duration: 0.05 });
+  }
 
   for (let i = 0; i < grid.length; i += 1) {
     if (grid[i] === 'N') {
