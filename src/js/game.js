@@ -124,6 +124,7 @@ metronomeBtn.addEventListener('click', async () => {
 
 refreshBtn.addEventListener('click', () => {
   stopListen();
+  stopMetronome();
   currentSequence = generateSequence(currentState.pool, currentState.time);
   renderScore();
 });
