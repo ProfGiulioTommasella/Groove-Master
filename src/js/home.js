@@ -1,8 +1,14 @@
 import { FIGURES, isPoolValid } from './figures.js';
 import { PRESETS, MIN_LEVEL, MAX_LEVEL, LEVEL_NAMES, levelColor } from './presets.js';
-import { loadState, saveState } from './state.js';
+import { loadState, saveState, DEFAULT_STATE } from './state.js';
 import { renderPatternCells } from './patternView.js';
-import { startGame } from './game.js';
+import { startGame, registerHomeReset } from './game.js';
+
+function applyHomeDefaults(state) {
+  state.time = DEFAULT_STATE.time;
+  state.level = DEFAULT_STATE.level;
+  state.pool = [...PRESETS[DEFAULT_STATE.level]];
+}
 
 function findPresetLevel(pool) {
   const sorted = [...pool].sort((a, b) => a - b);
@@ -17,6 +23,9 @@ function findPresetLevel(pool) {
 
 export function initHome() {
   const state = loadState();
+  // Time signature and difficulty always start over at 2/4 + Beginner,
+  // both on first load and whenever Home is shown again; only BPM persists.
+  applyHomeDefaults(state);
 
   const timeButtons = [...document.querySelectorAll('#time-group .chip')];
   const levelGroup = document.getElementById('level-group');
@@ -132,6 +141,15 @@ export function initHome() {
     if (!isPoolValid(state.pool)) return;
     persist();
     startGame(state);
+  });
+
+  registerHomeReset(() => {
+    applyHomeDefaults(state);
+    persist();
+    refreshTimeUI();
+    refreshLevelUI();
+    renderFigurePicker();
+    refreshStartUI();
   });
 
   refreshTimeUI();

@@ -9,6 +9,13 @@ let currentSequence = [];
 let tipOn = false;
 let listenController = null;
 let metronome = null;
+let onHomeReset = null;
+
+// Home registers a callback that resets its own state (time signature,
+// difficulty) back to defaults; called whenever we navigate back there.
+export function registerHomeReset(fn) {
+  onHomeReset = fn;
+}
 
 const screenHome = document.getElementById('screen-home');
 const screenGame = document.getElementById('screen-game');
@@ -156,6 +163,7 @@ listenBtn.addEventListener('click', () => {
 backHomeBtn.addEventListener('click', () => {
   stopListen();
   stopMetronome();
+  onHomeReset?.();
   screenGame.classList.add('hidden');
   screenHome.classList.remove('hidden');
 });
