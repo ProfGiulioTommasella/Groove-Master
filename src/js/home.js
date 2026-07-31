@@ -1,5 +1,5 @@
 import { FIGURES, isPoolValid } from './figures.js';
-import { PRESETS, MIN_LEVEL, MAX_LEVEL } from './presets.js';
+import { PRESETS, MIN_LEVEL, MAX_LEVEL, LEVEL_NAMES, levelColor } from './presets.js';
 import { loadState, saveState } from './state.js';
 
 const BPM_MIN = 60;
@@ -32,7 +32,7 @@ export function initHome() {
   const state = loadState();
 
   const timeButtons = [...document.querySelectorAll('#time-group .chip')];
-  const levelButtons = [...document.querySelectorAll('#level-group .chip')];
+  const levelGroup = document.getElementById('level-group');
   const figurePicker = document.getElementById('figure-picker');
   const bpmValue = document.getElementById('bpm-value');
   const bpmMinus = document.getElementById('bpm-minus');
@@ -58,9 +58,10 @@ export function initHome() {
 
   function refreshLevelUI() {
     const matchedLevel = findPresetLevel(state.pool);
-    for (const btn of levelButtons) {
+    for (const btn of levelGroup.querySelectorAll('.level-chip')) {
       btn.classList.toggle('active', Number(btn.dataset.level) === matchedLevel);
     }
+    customIndicator.classList.toggle('active', matchedLevel === null);
   }
 
   function refreshBpmUI() {
@@ -79,6 +80,40 @@ export function initHome() {
     startBtn.disabled = !valid;
     poolWarning.classList.toggle('hidden', valid);
   }
+
+  function buildLevelGroup() {
+    levelGroup.innerHTML = '';
+    for (let level = MIN_LEVEL; level <= MAX_LEVEL; level += 1) {
+      const color = levelColor(level);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip level-chip';
+      btn.dataset.level = String(level);
+      btn.title = `Level ${level}`;
+      btn.textContent = LEVEL_NAMES[level];
+      btn.style.setProperty('--level-color', color.bg);
+      btn.style.setProperty('--level-glow', color.glow);
+      btn.style.setProperty('--level-ink', color.ink);
+      btn.addEventListener('click', () => {
+        state.level = level;
+        state.pool = [...PRESETS[level]];
+        refreshLevelUI();
+        renderFigurePicker();
+        refreshStartUI();
+        persist();
+      });
+      levelGroup.appendChild(btn);
+    }
+
+    const custom = document.createElement('span');
+    custom.className = 'chip chip-custom';
+    custom.textContent = 'Custom';
+    custom.title = 'Lights up when the figure pool does not match a preset';
+    levelGroup.appendChild(custom);
+    return custom;
+  }
+
+  const customIndicator = buildLevelGroup();
 
   function renderFigurePicker() {
     figurePicker.innerHTML = '';
@@ -126,17 +161,6 @@ export function initHome() {
     });
   });
 
-  levelButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      state.level = Number(btn.dataset.level);
-      state.pool = [...PRESETS[state.level]];
-      refreshLevelUI();
-      renderFigurePicker();
-      refreshStartUI();
-      persist();
-    });
-  });
-
   bpmMinus.addEventListener('click', () => {
     state.bpm = Math.max(BPM_MIN, state.bpm - BPM_STEP);
     refreshBpmUI();
@@ -158,8 +182,10 @@ export function initHome() {
   startBtn.addEventListener('click', () => {
     if (!isPoolValid(state.pool)) return;
     persist();
+    const matchedLevel = findPresetLevel(state.pool);
     const summary = {
       timeSignature: `${state.time}/4`,
+      difficulty: matchedLevel ? LEVEL_NAMES[matchedLevel] : 'Custom',
       bpm: state.bpm,
       metronome: state.metronomeOn ? 'on' : 'off',
       selectedFigures: state.pool

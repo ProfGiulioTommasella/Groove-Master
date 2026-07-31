@@ -105,6 +105,34 @@ h1 {
   font-weight: 600;
 }
 
+/* Difficulty chips get their own light-green-to-dark-red hue (set inline
+   per level via --level-color/--level-glow/--level-ink) only once selected,
+   so the resting row stays visually consistent with the rest of the console. */
+.level-chip.active {
+  background: var(--level-color);
+  color: var(--level-ink);
+  box-shadow: 0 0 14px var(--level-glow);
+  border-color: var(--level-color);
+}
+
+.chip-custom {
+  cursor: default;
+  border-style: dashed;
+  font-style: italic;
+}
+
+.chip-custom:hover {
+  box-shadow: none;
+}
+
+.chip-custom.active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 0 14px var(--accent-glow);
+  font-weight: 600;
+  font-style: normal;
+}
+
 .bpm-control {
   display: flex;
   align-items: center;
