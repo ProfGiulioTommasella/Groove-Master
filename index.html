@@ -11,26 +11,40 @@
     <section id="screen-home" class="screen">
       <h1>Groove Master</h1>
 
-      <div class="panel time-panel">
-        <h2>Time signature</h2>
-        <div class="button-group" id="time-group">
-          <button type="button" class="chip" data-time="2">2/4</button>
-          <button type="button" class="chip" data-time="3">3/4</button>
-          <button type="button" class="chip" data-time="4">4/4</button>
+      <div class="panel readout-panel">
+        <div class="readout-screen">
+          <div class="readout-row">
+            <span class="readout-label">Time</span>
+            <span id="display-time" class="readout-value">4/4</span>
+          </div>
+          <div class="readout-row">
+            <span class="readout-label">Level</span>
+            <span id="display-level" class="readout-value">Beginner</span>
+          </div>
+          <p id="pool-warning" class="warning hidden">
+            Select at least one one-movement figure (quarter note or one of its variants)
+            so the last movement of the bar always has a candidate.
+          </p>
         </div>
       </div>
 
-      <div class="panel difficulty-panel">
-        <h2>Difficulty</h2>
-        <div class="button-group" id="level-group"></div>
-        <div id="figure-picker" class="figure-grid"></div>
+      <div class="panel console-panel">
+        <div class="knob-unit">
+          <div class="knob" id="time-knob" tabindex="0" role="button" aria-label="Time signature"></div>
+          <span class="knob-label">Time signature</span>
+        </div>
+        <div class="knob-unit">
+          <div class="knob" id="level-knob" tabindex="0" role="button" aria-label="Level"></div>
+          <span class="knob-label">Level</span>
+          <span class="chip chip-custom" id="custom-indicator">Custom</span>
+        </div>
+      </div>
+
+      <div class="panel lever-deck-panel">
+        <div id="figure-picker" class="lever-deck"></div>
       </div>
 
       <div class="panel start-panel">
-        <p id="pool-warning" class="warning hidden">
-          Select at least one one-movement figure (quarter note or one of its variants)
-          so the last movement of the bar always has a candidate.
-        </p>
         <button type="button" id="start-btn" class="start-btn" disabled>Start</button>
       </div>
     </section>

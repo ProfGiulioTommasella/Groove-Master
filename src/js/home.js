@@ -4,10 +4,57 @@ import { loadState, saveState, DEFAULT_STATE } from './state.js';
 import { renderPatternCells } from './patternView.js';
 import { startGame, registerHomeReset } from './game.js';
 
-function applyHomeDefaults(state) {
-  state.time = DEFAULT_STATE.time;
-  state.level = DEFAULT_STATE.level;
-  state.pool = [...PRESETS[DEFAULT_STATE.level]];
+const TIME_SIGNATURES = [2, 3, 4];
+const KNOB_ARC_DEGREES = 270;
+
+function angleForIndex(index, steps) {
+  if (steps <= 1) return 0;
+  return -KNOB_ARC_DEGREES / 2 + (index * KNOB_ARC_DEGREES) / (steps - 1);
+}
+
+// A stepped rotary knob: click (or Enter/Space) advances to the next
+// position and wraps around. No drag gesture, so it stays reliable on
+// touch devices - the physical feel comes from the animated pointer
+// rotation and tick marks, not from drag physics.
+function createKnob(container, { steps, onAdvance }) {
+  container.innerHTML = '';
+
+  const ticks = document.createElement('div');
+  ticks.className = 'knob-ticks';
+  for (let i = 0; i < steps; i += 1) {
+    const tick = document.createElement('span');
+    tick.className = 'knob-tick';
+    // translate pushes the tick outward from the knob's center, along its
+    // own (already rotated) axis, to sit just outside the face ring.
+    tick.style.transform = `rotate(${angleForIndex(i, steps)}deg) translate(0, -34px)`;
+    ticks.appendChild(tick);
+  }
+
+  const face = document.createElement('div');
+  face.className = 'knob-face';
+  const pointer = document.createElement('div');
+  pointer.className = 'knob-pointer';
+  face.appendChild(pointer);
+
+  container.append(ticks, face);
+
+  container.addEventListener('click', onAdvance);
+  container.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onAdvance();
+    }
+  });
+
+  return {
+    setIndex(index, color) {
+      pointer.style.transform = `rotate(${angleForIndex(index, steps)}deg)`;
+      if (color) {
+        pointer.style.background = color.bg;
+        pointer.style.boxShadow = `0 0 8px ${color.glow}`;
+      }
+    },
+  };
 }
 
 function findPresetLevel(pool) {
@@ -21,14 +68,23 @@ function findPresetLevel(pool) {
   return null;
 }
 
+function applyHomeDefaults(state) {
+  state.time = DEFAULT_STATE.time;
+  state.level = DEFAULT_STATE.level;
+  state.pool = [...PRESETS[DEFAULT_STATE.level]];
+}
+
 export function initHome() {
   const state = loadState();
   // Time signature and difficulty always start over at 2/4 + Beginner,
   // both on first load and whenever Home is shown again; only BPM persists.
   applyHomeDefaults(state);
 
-  const timeButtons = [...document.querySelectorAll('#time-group .chip')];
-  const levelGroup = document.getElementById('level-group');
+  const timeKnobEl = document.getElementById('time-knob');
+  const levelKnobEl = document.getElementById('level-knob');
+  const customIndicator = document.getElementById('custom-indicator');
+  const displayTime = document.getElementById('display-time');
+  const displayLevel = document.getElementById('display-level');
   const figurePicker = document.getElementById('figure-picker');
   const poolWarning = document.getElementById('pool-warning');
   const startBtn = document.getElementById('start-btn');
@@ -38,16 +94,15 @@ export function initHome() {
   }
 
   function refreshTimeUI() {
-    for (const btn of timeButtons) {
-      btn.classList.toggle('active', Number(btn.dataset.time) === state.time);
-    }
+    const index = TIME_SIGNATURES.indexOf(state.time);
+    timeKnob.setIndex(index);
+    displayTime.textContent = `${state.time}/4`;
   }
 
   function refreshLevelUI() {
     const matchedLevel = findPresetLevel(state.pool);
-    for (const btn of levelGroup.querySelectorAll('.level-chip')) {
-      btn.classList.toggle('active', Number(btn.dataset.level) === matchedLevel);
-    }
+    levelKnob.setIndex(state.level - MIN_LEVEL, levelColor(state.level));
+    displayLevel.textContent = matchedLevel ? LEVEL_NAMES[matchedLevel] : 'Custom';
     customIndicator.classList.toggle('active', matchedLevel === null);
   }
 
@@ -57,50 +112,37 @@ export function initHome() {
     poolWarning.classList.toggle('hidden', valid);
   }
 
-  function buildLevelGroup() {
-    levelGroup.innerHTML = '';
-    for (let level = MIN_LEVEL; level <= MAX_LEVEL; level += 1) {
-      const color = levelColor(level);
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'chip level-chip';
-      btn.dataset.level = String(level);
-      btn.title = `Level ${level}`;
-      btn.textContent = LEVEL_NAMES[level];
-      btn.style.setProperty('--level-color', color.bg);
-      btn.style.setProperty('--level-glow', color.glow);
-      btn.style.setProperty('--level-ink', color.ink);
-      btn.addEventListener('click', () => {
-        state.level = level;
-        state.pool = [...PRESETS[level]];
-        refreshLevelUI();
-        renderFigurePicker();
-        refreshStartUI();
-        persist();
-      });
-      levelGroup.appendChild(btn);
-    }
+  const timeKnob = createKnob(timeKnobEl, {
+    steps: TIME_SIGNATURES.length,
+    onAdvance: () => {
+      const index = TIME_SIGNATURES.indexOf(state.time);
+      state.time = TIME_SIGNATURES[(index + 1) % TIME_SIGNATURES.length];
+      refreshTimeUI();
+      persist();
+    },
+  });
 
-    const custom = document.createElement('span');
-    custom.className = 'chip chip-custom';
-    custom.textContent = 'Custom';
-    custom.title = 'Lights up when the figure pool does not match a preset';
-    levelGroup.appendChild(custom);
-    return custom;
-  }
-
-  const customIndicator = buildLevelGroup();
+  const levelKnob = createKnob(levelKnobEl, {
+    steps: MAX_LEVEL - MIN_LEVEL + 1,
+    onAdvance: () => {
+      state.level = state.level >= MAX_LEVEL ? MIN_LEVEL : state.level + 1;
+      state.pool = [...PRESETS[state.level]];
+      refreshLevelUI();
+      renderFigurePicker();
+      refreshStartUI();
+      persist();
+    },
+  });
 
   function renderFigurePicker() {
     figurePicker.innerHTML = '';
     for (const figure of FIGURES) {
-      const tile = document.createElement('button');
-      tile.type = 'button';
-      tile.className = 'figure-tile';
-      tile.dataset.figureId = String(figure.id);
-      tile.title = figure.name;
-      tile.setAttribute('aria-pressed', String(state.pool.includes(figure.id)));
-      tile.classList.toggle('selected', state.pool.includes(figure.id));
+      const lever = document.createElement('button');
+      lever.type = 'button';
+      lever.className = 'lever-unit';
+      lever.dataset.figureId = String(figure.id);
+      lever.title = figure.name;
+      lever.setAttribute('aria-pressed', String(state.pool.includes(figure.id)));
 
       const img = document.createElement('img');
       img.className = 'figure-img';
@@ -110,32 +152,34 @@ export function initHome() {
         img.replaceWith(renderPatternCells(figure.pattern));
       };
 
-      tile.appendChild(img);
-      tile.addEventListener('click', () => {
+      const track = document.createElement('span');
+      track.className = 'lever-track';
+      const led = document.createElement('span');
+      led.className = 'lever-led';
+      const thumb = document.createElement('span');
+      thumb.className = 'lever-thumb';
+      track.append(led, thumb);
+
+      lever.append(img, track);
+      lever.classList.toggle('engaged', state.pool.includes(figure.id));
+
+      lever.addEventListener('click', () => {
         const idx = state.pool.indexOf(figure.id);
         if (idx >= 0) {
           state.pool.splice(idx, 1);
         } else {
           state.pool.push(figure.id);
         }
-        tile.classList.toggle('selected', state.pool.includes(figure.id));
-        tile.setAttribute('aria-pressed', String(state.pool.includes(figure.id)));
+        lever.classList.toggle('engaged', state.pool.includes(figure.id));
+        lever.setAttribute('aria-pressed', String(state.pool.includes(figure.id)));
         refreshLevelUI();
         refreshStartUI();
         persist();
       });
 
-      figurePicker.appendChild(tile);
+      figurePicker.appendChild(lever);
     }
   }
-
-  timeButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      state.time = Number(btn.dataset.time);
-      refreshTimeUI();
-      persist();
-    });
-  });
 
   startBtn.addEventListener('click', () => {
     if (!isPoolValid(state.pool)) return;
