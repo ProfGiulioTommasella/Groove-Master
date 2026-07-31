@@ -9,7 +9,6 @@
 // scheduling/highlighting, it does nothing to sound already queued up.
 
 let audioContext = null;
-const bufferCache = new Map();
 
 function getContext() {
   if (!audioContext) {
@@ -21,31 +20,19 @@ function getContext() {
   return audioContext;
 }
 
-async function loadBuffer(ctx, url) {
-  if (bufferCache.has(url)) return bufferCache.get(url);
-  const promise = fetch(url)
-    .then((res) => res.arrayBuffer())
-    .then((data) => ctx.decodeAudioData(data));
-  bufferCache.set(url, promise);
-  return promise;
-}
+// Peak amplitude for every synthesized tick (metronome, pre-count, rhythm),
+// -3dB down from the original 0.35 (0.35 * 10^(-3/20)).
+const TICK_GAIN = 0.35 * 10 ** (-3 / 20);
 
-function playBuffer(ctx, buffer, when) {
-  const source = ctx.createBufferSource();
-  source.buffer = buffer;
-  source.connect(ctx.destination);
-  source.start(when);
-  return { node: source, endTime: when + buffer.duration };
-}
-
-// No percussion sample exists yet (see assets/audio/README.md), so the
-// rhythm-listen click is synthesized: a short, dry, unpitched-sounding tick.
+// All sound is synthesized - no percussion sample exists yet (see
+// assets/audio/README.md), and the metronome's click is synthesized too
+// (a recorded sample was tried and didn't read as well as this tone).
 function playSyntheticTick(ctx, when, { frequency = 1400, duration = 0.05 } = {}) {
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = 'square';
   osc.frequency.setValueAtTime(frequency, when);
-  gain.gain.setValueAtTime(0.35, when);
+  gain.gain.setValueAtTime(TICK_GAIN, when);
   gain.gain.exponentialRampToValueAtTime(0.001, when + duration);
   osc.connect(gain);
   gain.connect(ctx.destination);
@@ -88,17 +75,12 @@ const SCHEDULE_AHEAD_S = 0.1;
 export function createMetronome(getBpm) {
   let timerId = null;
   let nextClickTime = 0;
-  let clickBuffer = null;
   const tracker = createNodeTracker();
 
   function scheduleTick() {
     const ctx = getContext();
     while (nextClickTime < ctx.currentTime + SCHEDULE_AHEAD_S) {
-      tracker.add(
-        clickBuffer
-          ? playBuffer(ctx, clickBuffer, nextClickTime)
-          : playSyntheticTick(ctx, nextClickTime, { frequency: 1800, duration: 0.04 })
-      );
+      tracker.add(playSyntheticTick(ctx, nextClickTime, { frequency: 1800, duration: 0.04 }));
       nextClickTime += 60 / getBpm();
     }
     tracker.pruneFinished(ctx);
@@ -107,7 +89,6 @@ export function createMetronome(getBpm) {
   return {
     async start() {
       const ctx = getContext();
-      clickBuffer = await loadBuffer(ctx, 'assets/audio/click.mp3').catch(() => null);
       nextClickTime = ctx.currentTime + 0.05;
       scheduleTick();
       timerId = window.setInterval(scheduleTick, LOOKAHEAD_INTERVAL_MS);
