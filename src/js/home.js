@@ -33,7 +33,7 @@ export function initHome() {
 
   const timeButtons = [...document.querySelectorAll('#time-group .chip')];
   const levelButtons = [...document.querySelectorAll('#level-group .chip')];
-  const customGrid = document.getElementById('custom-figures');
+  const figurePicker = document.getElementById('figure-picker');
   const bpmValue = document.getElementById('bpm-value');
   const bpmMinus = document.getElementById('bpm-minus');
   const bpmPlus = document.getElementById('bpm-plus');
@@ -57,11 +57,10 @@ export function initHome() {
   }
 
   function refreshLevelUI() {
+    const matchedLevel = findPresetLevel(state.pool);
     for (const btn of levelButtons) {
-      const isCustomBtn = btn.dataset.level === 'custom';
-      btn.classList.toggle('active', isCustomBtn ? state.customMode : Number(btn.dataset.level) === state.level);
+      btn.classList.toggle('active', Number(btn.dataset.level) === matchedLevel);
     }
-    customGrid.classList.toggle('hidden', !state.customMode);
   }
 
   function refreshBpmUI() {
@@ -81,31 +80,27 @@ export function initHome() {
     poolWarning.classList.toggle('hidden', valid);
   }
 
-  function renderCustomGrid() {
-    customGrid.innerHTML = '';
+  function renderFigurePicker() {
+    figurePicker.innerHTML = '';
     for (const figure of FIGURES) {
       const tile = document.createElement('button');
       tile.type = 'button';
       tile.className = 'figure-tile';
       tile.dataset.figureId = String(figure.id);
+      tile.title = figure.name;
       tile.setAttribute('aria-pressed', String(state.pool.includes(figure.id)));
       tile.classList.toggle('selected', state.pool.includes(figure.id));
 
       const img = document.createElement('img');
       img.className = 'figure-img';
       img.src = figure.img;
-      img.alt = figure.nome;
+      img.alt = figure.name;
       img.onerror = () => {
         img.replaceWith(renderPatternCells(figure.pattern));
       };
 
-      const name = document.createElement('span');
-      name.className = 'figure-name';
-      name.textContent = figure.nome;
-
-      tile.append(img, name);
+      tile.appendChild(img);
       tile.addEventListener('click', () => {
-        if (!state.customMode) return;
         const idx = state.pool.indexOf(figure.id);
         if (idx >= 0) {
           state.pool.splice(idx, 1);
@@ -114,11 +109,12 @@ export function initHome() {
         }
         tile.classList.toggle('selected', state.pool.includes(figure.id));
         tile.setAttribute('aria-pressed', String(state.pool.includes(figure.id)));
+        refreshLevelUI();
         refreshStartUI();
         persist();
       });
 
-      customGrid.appendChild(tile);
+      figurePicker.appendChild(tile);
     }
   }
 
@@ -132,15 +128,10 @@ export function initHome() {
 
   levelButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      if (btn.dataset.level === 'custom') {
-        state.customMode = true;
-      } else {
-        state.customMode = false;
-        state.level = Number(btn.dataset.level);
-        state.pool = [...PRESETS[state.level]];
-      }
+      state.level = Number(btn.dataset.level);
+      state.pool = [...PRESETS[state.level]];
       refreshLevelUI();
-      renderCustomGrid();
+      renderFigurePicker();
       refreshStartUI();
       persist();
     });
@@ -168,14 +159,13 @@ export function initHome() {
     if (!isPoolValid(state.pool)) return;
     persist();
     const summary = {
-      metrica: `${state.time}/4`,
+      timeSignature: `${state.time}/4`,
       bpm: state.bpm,
-      livello: state.customMode ? 'custom' : state.level,
-      metronomo: state.metronomeOn ? 'on' : 'off',
-      figureSelezionate: state.pool
+      metronome: state.metronomeOn ? 'on' : 'off',
+      selectedFigures: state.pool
         .slice()
         .sort((a, b) => a - b)
-        .map((id) => FIGURES.find((f) => f.id === id).nome),
+        .map((id) => FIGURES.find((f) => f.id === id).name),
     };
     gameConfig.textContent = JSON.stringify(summary, null, 2);
     screenHome.classList.add('hidden');
@@ -187,19 +177,10 @@ export function initHome() {
     screenHome.classList.remove('hidden');
   });
 
-  // Se il pool caricato da localStorage combacia con un preset, riallinea il livello;
-  // altrimenti è una selezione custom salvata in precedenza.
-  const matchedLevel = findPresetLevel(state.pool);
-  if (matchedLevel && !state.customMode) {
-    state.level = matchedLevel;
-  } else if (!matchedLevel) {
-    state.customMode = true;
-  }
-
   refreshTimeUI();
   refreshLevelUI();
   refreshBpmUI();
   refreshMetronomeUI();
-  renderCustomGrid();
+  renderFigurePicker();
   refreshStartUI();
 }

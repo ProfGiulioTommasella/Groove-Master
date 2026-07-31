@@ -7,7 +7,6 @@ export const DEFAULT_STATE = {
   bpm: 100,
   level: 1,
   pool: [...PRESETS[1]],
-  customMode: false,
   metronomeOn: false,
 };
 

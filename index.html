@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
       <h1>Groove Master</h1>
 
       <div class="panel">
-        <h2>Metrica</h2>
+        <h2>Time signature</h2>
         <div class="button-group" id="time-group">
           <button type="button" class="chip" data-time="2">2/4</button>
           <button type="button" class="chip" data-time="3">3/4</button>
@@ -21,17 +21,7 @@
       </div>
 
       <div class="panel">
-        <h2>Tempo</h2>
-        <div class="bpm-control">
-          <button type="button" id="bpm-minus" aria-label="Diminuisci BPM">−</button>
-          <span id="bpm-value">100</span>
-          <span class="unit">BPM</span>
-          <button type="button" id="bpm-plus" aria-label="Aumenta BPM">+</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>Difficoltà</h2>
+        <h2>Difficulty</h2>
         <div class="button-group" id="level-group">
           <button type="button" class="chip" data-level="1">1</button>
           <button type="button" class="chip" data-level="2">2</button>
@@ -41,13 +31,38 @@
           <button type="button" class="chip" data-level="6">6</button>
           <button type="button" class="chip" data-level="7">7</button>
           <button type="button" class="chip" data-level="8">8</button>
-          <button type="button" class="chip chip-custom" data-level="custom">Custom</button>
         </div>
-        <div id="custom-figures" class="figure-grid hidden"></div>
+        <div id="figure-picker" class="figure-grid"></div>
+      </div>
+
+      <div class="panel start-panel">
+        <p id="pool-warning" class="warning hidden">
+          Select at least one one-movement figure (quarter note or one of its variants)
+          so the last movement of the bar always has a candidate.
+        </p>
+        <button type="button" id="start-btn" class="start-btn" disabled>Start</button>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen hidden">
+      <h1>Game screen</h1>
+      <p class="placeholder-note">
+        Still to be implemented (see docs/spec-groove-master.md &sect;5&ndash;&sect;7): the 4-bar
+        draw, the staff, Go!, Tip and playback will go here.
+      </p>
+
+      <div class="panel">
+        <h2>Tempo</h2>
+        <div class="bpm-control">
+          <button type="button" id="bpm-minus" aria-label="Decrease BPM">&minus;</button>
+          <span id="bpm-value">100</span>
+          <span class="unit">BPM</span>
+          <button type="button" id="bpm-plus" aria-label="Increase BPM">+</button>
+        </div>
       </div>
 
       <div class="panel">
-        <h2>Metronomo</h2>
+        <h2>Metronome</h2>
         <label class="switch">
           <input type="checkbox" id="metronome-toggle">
           <span class="switch-track"></span>
@@ -55,24 +70,9 @@
         </label>
       </div>
 
-      <div class="panel start-panel">
-        <p id="pool-warning" class="warning hidden">
-          Seleziona almeno una figura da un movimento (semiminima o una delle sue varianti)
-          perché l'ultimo movimento della battuta abbia sempre un candidato.
-        </p>
-        <button type="button" id="start-btn" class="start-btn" disabled>Start</button>
-      </div>
-    </section>
-
-    <section id="screen-game" class="screen hidden">
-      <h1>Schermata di gioco</h1>
-      <p class="placeholder-note">
-        Ancora da implementare (vedi docs/spec-groove-master.md §5–§7): qui arriveranno
-        il sorteggio delle 4 battute, il pentagramma, Go!, Tip e l'ascolto.
-      </p>
-      <p>Configurazione ricevuta dalla Home:</p>
+      <p>Configuration received from Home:</p>
       <pre id="game-config"></pre>
-      <button type="button" id="back-home">&larr; Torna alla Home</button>
+      <button type="button" id="back-home">&larr; Back to Home</button>
     </section>
   </main>
 
