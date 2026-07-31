@@ -1,12 +1,21 @@
+/* Palette ricavata da assets/screens/00_Plancia_Home.png e 00_Game_Screen_4.png
+   (tema "plancia di comando" del progetto Scratch originale). */
 :root {
-  --bg: #f4f1ea;
-  --panel-bg: #ffffff;
-  --ink: #2b2620;
-  --accent: #c65d2e;
-  --accent-ink: #ffffff;
-  --muted: #8a8272;
-  --border: #ddd6c7;
-  --warn: #b3401f;
+  --bg: #0a0d10;
+  --bg-grid: rgba(0, 229, 255, 0.035);
+  --panel-bg: #0b2436;
+  --panel-bg-alt: #071a29;
+  --screen-bg: #e9eff1;
+  --screen-bg-selected: #cdeef4;
+  --ink: #cdeefb;
+  --ink-dark: #0a1a22;
+  --accent: #00e5ff;
+  --accent-glow: rgba(0, 229, 255, 0.45);
+  --accent-ink: #04141a;
+  --muted: #5f96a8;
+  --border: rgba(0, 229, 255, 0.3);
+  --warn: #ff6b5e;
+  --warn-glow: rgba(255, 107, 94, 0.45);
 }
 
 * {
@@ -16,8 +25,12 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', system-ui, sans-serif;
-  background: var(--bg);
+  background:
+    repeating-linear-gradient(0deg, var(--bg-grid) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, var(--bg-grid) 0 1px, transparent 1px 28px),
+    radial-gradient(ellipse at 50% -10%, #12222c 0%, var(--bg) 55%);
   color: var(--ink);
+  min-height: 100vh;
 }
 
 #app {
@@ -28,8 +41,13 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 1.8rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 1.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   margin-bottom: 1.5rem;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow), 0 0 22px var(--accent-glow);
 }
 
 .hidden {
@@ -37,19 +55,26 @@ h1 {
 }
 
 .panel {
-  background: var(--panel-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
+  position: relative;
+  background: linear-gradient(165deg, var(--panel-bg), var(--panel-bg-alt));
+  clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 0 20px -6px var(--accent-glow);
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 1.1rem;
 }
 
 .panel h2 {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
+  margin: 0 0 0.9rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.85rem;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.12em;
+}
+
+.panel h2::before {
+  content: '\25B8\0020';
+  color: var(--accent);
 }
 
 .button-group {
@@ -59,24 +84,25 @@ h1 {
 }
 
 .chip {
-  border: 1px solid var(--border);
-  background: var(--bg);
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+  border: 1px solid var(--accent);
+  background: rgba(0, 20, 28, 0.6);
   color: var(--ink);
-  border-radius: 999px;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
 .chip:hover {
-  border-color: var(--accent);
+  box-shadow: 0 0 10px -2px var(--accent-glow);
 }
 
 .chip.active {
   background: var(--accent);
-  border-color: var(--accent);
   color: var(--accent-ink);
+  box-shadow: 0 0 14px var(--accent-glow);
+  font-weight: 600;
 }
 
 .chip-custom {
@@ -94,23 +120,32 @@ h1 {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  border: 1px solid var(--accent);
+  background: rgba(0, 20, 28, 0.6);
+  color: var(--ink);
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.bpm-control button:hover:not(:disabled) {
+  box-shadow: 0 0 10px -2px var(--accent-glow);
 }
 
 .bpm-control button:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 #bpm-value {
+  font-family: 'Consolas', 'Courier New', monospace;
   font-size: 1.6rem;
   font-weight: 600;
   min-width: 3ch;
   text-align: center;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
 }
 
 .unit {
@@ -132,14 +167,15 @@ h1 {
   gap: 0.4rem;
   padding: 0.6rem 0.4rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
+  border-radius: 6px;
+  background: var(--screen-bg);
   cursor: pointer;
+  transition: box-shadow 0.15s, background 0.15s;
 }
 
 .figure-tile.selected {
-  border-color: var(--accent);
-  background: #fbe9df;
+  background: var(--screen-bg-selected);
+  box-shadow: 0 0 0 2px var(--accent), 0 0 12px -2px var(--accent-glow);
 }
 
 .figure-img {
@@ -151,7 +187,7 @@ h1 {
 .figure-name {
   font-size: 0.75rem;
   text-align: center;
-  color: var(--ink);
+  color: var(--ink-dark);
 }
 
 .pattern {
@@ -163,16 +199,16 @@ h1 {
   width: 10px;
   height: 20px;
   border-radius: 2px;
-  border: 1px solid var(--border);
+  border: 1px solid #9db6bd;
 }
 
 .pattern .cell.attacco {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: #0a1a22;
+  border-color: #0a1a22;
 }
 
 .pattern .cell.prolungamento {
-  background: #ecd2c0;
+  background: #b7ccd1;
 }
 
 .pattern .cell.silenzio {
@@ -198,33 +234,38 @@ h1 {
   width: 44px;
   height: 24px;
   border-radius: 999px;
-  background: var(--border);
+  background: rgba(0, 20, 28, 0.6);
+  border: 1px solid var(--accent);
   position: relative;
-  transition: background 0.15s;
+  transition: box-shadow 0.15s;
 }
 
 .switch-track::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 1px;
+  left: 1px;
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: white;
-  transition: transform 0.15s;
+  background: var(--muted);
+  transition: transform 0.15s, background 0.15s;
 }
 
 .switch input:checked + .switch-track {
-  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .switch input:checked + .switch-track::after {
   transform: translateX(20px);
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 
 .switch-label {
+  font-family: 'Consolas', 'Courier New', monospace;
   font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
 .start-panel {
@@ -233,6 +274,11 @@ h1 {
 
 .warning {
   color: var(--warn);
+  background: rgba(255, 107, 94, 0.08);
+  border: 1px solid var(--warn);
+  box-shadow: 0 0 12px -4px var(--warn-glow);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
   font-size: 0.9rem;
   margin: 0 0 0.75rem;
 }
@@ -240,19 +286,25 @@ h1 {
 .start-btn {
   width: 100%;
   padding: 0.9rem;
+  font-family: 'Consolas', 'Courier New', monospace;
   font-size: 1.2rem;
   font-weight: 600;
-  border: none;
-  border-radius: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
   background: var(--accent);
   color: var(--accent-ink);
   cursor: pointer;
+  box-shadow: 0 0 18px var(--accent-glow);
 }
 
 .start-btn:disabled {
-  background: var(--border);
+  background: rgba(0, 20, 28, 0.6);
+  border-color: var(--muted);
   color: var(--muted);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .placeholder-note {
@@ -261,18 +313,25 @@ h1 {
 }
 
 #game-config {
-  background: var(--panel-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  background: rgba(0, 10, 14, 0.6);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: var(--accent);
   padding: 1rem;
   overflow-x: auto;
 }
 
 #back-home {
   padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  border: 1px solid var(--accent);
+  background: rgba(0, 20, 28, 0.6);
+  color: var(--ink);
   cursor: pointer;
   font-size: 1rem;
+}
+
+#back-home:hover {
+  box-shadow: 0 0 10px -2px var(--accent-glow);
 }
