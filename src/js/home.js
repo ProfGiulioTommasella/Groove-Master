@@ -1,10 +1,8 @@
 import { FIGURES, isPoolValid } from './figures.js';
 import { PRESETS, MIN_LEVEL, MAX_LEVEL, LEVEL_NAMES, levelColor } from './presets.js';
 import { loadState, saveState } from './state.js';
-
-const BPM_MIN = 60;
-const BPM_MAX = 120;
-const BPM_STEP = 5;
+import { renderPatternCells } from './patternView.js';
+import { startGame } from './game.js';
 
 function findPresetLevel(pool) {
   const sorted = [...pool].sort((a, b) => a - b);
@@ -17,34 +15,14 @@ function findPresetLevel(pool) {
   return null;
 }
 
-function renderPatternCells(pattern) {
-  const wrap = document.createElement('span');
-  wrap.className = 'pattern';
-  for (const ch of pattern) {
-    const cell = document.createElement('span');
-    cell.className = 'cell ' + (ch === 'N' ? 'attacco' : ch === '-' ? 'prolungamento' : 'silenzio');
-    wrap.appendChild(cell);
-  }
-  return wrap;
-}
-
 export function initHome() {
   const state = loadState();
 
   const timeButtons = [...document.querySelectorAll('#time-group .chip')];
   const levelGroup = document.getElementById('level-group');
   const figurePicker = document.getElementById('figure-picker');
-  const bpmValue = document.getElementById('bpm-value');
-  const bpmMinus = document.getElementById('bpm-minus');
-  const bpmPlus = document.getElementById('bpm-plus');
-  const metronomeToggle = document.getElementById('metronome-toggle');
-  const metronomeLabel = document.getElementById('metronome-label');
   const poolWarning = document.getElementById('pool-warning');
   const startBtn = document.getElementById('start-btn');
-  const screenHome = document.getElementById('screen-home');
-  const screenGame = document.getElementById('screen-game');
-  const gameConfig = document.getElementById('game-config');
-  const backHomeBtn = document.getElementById('back-home');
 
   function persist() {
     saveState(state);
@@ -62,17 +40,6 @@ export function initHome() {
       btn.classList.toggle('active', Number(btn.dataset.level) === matchedLevel);
     }
     customIndicator.classList.toggle('active', matchedLevel === null);
-  }
-
-  function refreshBpmUI() {
-    bpmValue.textContent = String(state.bpm);
-    bpmMinus.disabled = state.bpm <= BPM_MIN;
-    bpmPlus.disabled = state.bpm >= BPM_MAX;
-  }
-
-  function refreshMetronomeUI() {
-    metronomeToggle.checked = state.metronomeOn;
-    metronomeLabel.textContent = state.metronomeOn ? 'On' : 'Off';
   }
 
   function refreshStartUI() {
@@ -161,52 +128,14 @@ export function initHome() {
     });
   });
 
-  bpmMinus.addEventListener('click', () => {
-    state.bpm = Math.max(BPM_MIN, state.bpm - BPM_STEP);
-    refreshBpmUI();
-    persist();
-  });
-
-  bpmPlus.addEventListener('click', () => {
-    state.bpm = Math.min(BPM_MAX, state.bpm + BPM_STEP);
-    refreshBpmUI();
-    persist();
-  });
-
-  metronomeToggle.addEventListener('change', () => {
-    state.metronomeOn = metronomeToggle.checked;
-    refreshMetronomeUI();
-    persist();
-  });
-
   startBtn.addEventListener('click', () => {
     if (!isPoolValid(state.pool)) return;
     persist();
-    const matchedLevel = findPresetLevel(state.pool);
-    const summary = {
-      timeSignature: `${state.time}/4`,
-      difficulty: matchedLevel ? LEVEL_NAMES[matchedLevel] : 'Custom',
-      bpm: state.bpm,
-      metronome: state.metronomeOn ? 'on' : 'off',
-      selectedFigures: state.pool
-        .slice()
-        .sort((a, b) => a - b)
-        .map((id) => FIGURES.find((f) => f.id === id).name),
-    };
-    gameConfig.textContent = JSON.stringify(summary, null, 2);
-    screenHome.classList.add('hidden');
-    screenGame.classList.remove('hidden');
-  });
-
-  backHomeBtn.addEventListener('click', () => {
-    screenGame.classList.add('hidden');
-    screenHome.classList.remove('hidden');
+    startGame(state);
   });
 
   refreshTimeUI();
   refreshLevelUI();
-  refreshBpmUI();
-  refreshMetronomeUI();
   renderFigurePicker();
   refreshStartUI();
 }

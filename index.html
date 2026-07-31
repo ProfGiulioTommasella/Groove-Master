@@ -11,7 +11,7 @@
     <section id="screen-home" class="screen">
       <h1>Groove Master</h1>
 
-      <div class="panel">
+      <div class="panel time-panel">
         <h2>Time signature</h2>
         <div class="button-group" id="time-group">
           <button type="button" class="chip" data-time="2">2/4</button>
@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel difficulty-panel">
         <h2>Difficulty</h2>
         <div class="button-group" id="level-group"></div>
         <div id="figure-picker" class="figure-grid"></div>
@@ -37,33 +37,31 @@
 
     <section id="screen-game" class="screen hidden">
       <h1>Game screen</h1>
-      <p class="placeholder-note">
-        Still to be implemented (see docs/spec-groove-master.md &sect;5&ndash;&sect;7): the 4-bar
-        draw, the staff, Go!, Tip and playback will go here.
-      </p>
 
-      <div class="panel">
-        <h2>Tempo</h2>
+      <div class="panel score-panel">
+        <h2>Score</h2>
+        <div id="score" class="score"></div>
+      </div>
+
+      <div class="panel metronome-panel">
+        <h2>Metronome</h2>
         <div class="bpm-control">
           <button type="button" id="bpm-minus" aria-label="Decrease BPM">&minus;</button>
           <span id="bpm-value">100</span>
           <span class="unit">BPM</span>
           <button type="button" id="bpm-plus" aria-label="Increase BPM">+</button>
         </div>
+        <button type="button" id="metronome-btn" class="chip action-chip metronome-btn">&#9654; Start</button>
       </div>
 
-      <div class="panel">
-        <h2>Metronome</h2>
-        <label class="switch">
-          <input type="checkbox" id="metronome-toggle">
-          <span class="switch-track"></span>
-          <span class="switch-label" id="metronome-label">Off</span>
-        </label>
+      <div class="panel controls-panel">
+        <div class="button-group">
+          <button type="button" id="refresh-btn" class="chip action-chip">&#8635; Refresh</button>
+          <button type="button" id="tip-btn" class="chip action-chip">Tip</button>
+          <button type="button" id="listen-btn" class="chip action-chip">&#9654; Listen</button>
+          <button type="button" id="back-home" class="chip action-chip">&larr; Home</button>
+        </div>
       </div>
-
-      <p>Configuration received from Home:</p>
-      <pre id="game-config"></pre>
-      <button type="button" id="back-home">&larr; Back to Home</button>
     </section>
   </main>
 

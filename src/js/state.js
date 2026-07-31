@@ -2,12 +2,15 @@ import { PRESETS } from './presets.js';
 
 const STORAGE_KEY = 'groove-master:home-config';
 
+export const BPM_MIN = 60;
+export const BPM_MAX = 120;
+export const BPM_STEP = 5;
+
 export const DEFAULT_STATE = {
   time: 4,
   bpm: 100,
   level: 1,
   pool: [...PRESETS[1]],
-  metronomeOn: false,
 };
 
 export function loadState() {
