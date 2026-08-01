@@ -11,10 +11,14 @@
 let audioContext = null;
 
 function getContext() {
-  if (!audioContext) {
+  // Some browsers (notably Safari) fully close the AudioContext after the
+  // system sleeps or the screen locks for a while - resume() can't revive a
+  // closed context, so a fresh one has to be created. A merely suspended
+  // (or Safari's non-standard "interrupted") context just needs resume().
+  if (!audioContext || audioContext.state === 'closed') {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
   }
-  if (audioContext.state === 'suspended') {
+  if (audioContext.state !== 'running') {
     audioContext.resume();
   }
   return audioContext;
@@ -79,6 +83,13 @@ export function createMetronome(getBpm) {
 
   function scheduleTick() {
     const ctx = getContext();
+    // If the AudioContext got recreated (its clock restarts at 0) or the tab
+    // was suspended for a while, nextClickTime can be wildly out of sync
+    // with the new/current clock - resync instead of either silently going
+    // quiet until real time catches up, or firing a burst of missed clicks.
+    if (nextClickTime < ctx.currentTime - 1 || nextClickTime > ctx.currentTime + 5) {
+      nextClickTime = ctx.currentTime + 0.05;
+    }
     while (nextClickTime < ctx.currentTime + SCHEDULE_AHEAD_S) {
       tracker.add(playSyntheticTick(ctx, nextClickTime, { frequency: 1800, duration: 0.04 }));
       nextClickTime += 60 / getBpm();
