@@ -148,7 +148,6 @@ tipBtn.addEventListener('click', () => {
 });
 
 listenBtn.addEventListener('click', () => {
-  playUIClick();
   if (listenController) {
     stopListen();
     return;
