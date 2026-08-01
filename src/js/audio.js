@@ -47,9 +47,9 @@ function playSyntheticTick(ctx, when, { frequency = 1400, duration = 0.05 } = {}
 
 // Short, dry mechanical feedback for UI controls - quieter than the
 // metronome/rhythm ticks so it stays a subtle accent even when clicked
-// repeatedly in quick succession. Not used on Start/Listen: those already
-// have their own audio (screen transition / pre-count) right on their
-// heels, and the extra click just muddied it.
+// repeatedly in quick succession. Not used on the Metronome start/stop or
+// Listen buttons: those already have their own audio (ticking / pre-count)
+// right on their heels, and the extra click just muddied it.
 const UI_CLICK_GAIN = 0.18;
 
 function playClick(ctx, { frequency, duration, type = 'square' }) {

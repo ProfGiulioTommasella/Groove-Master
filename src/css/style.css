@@ -634,19 +634,25 @@ h1 {
 
   .readout-panel {
     grid-column: 1;
+    grid-row: 2;
   }
 
   .console-panel {
     grid-column: 1;
+    grid-row: 3;
   }
 
   .lever-deck-panel {
     grid-column: 2;
-    grid-row: 2 / span 3;
+    grid-row: 2 / span 2;
   }
 
+  /* Full width, below both columns - not tucked under the readout/console
+     column alone - so it reads as the single big "go" action for the
+     whole console. */
   .start-panel {
-    grid-column: 1;
+    grid-column: 1 / -1;
+    grid-row: 4;
   }
 
   .score-panel {
@@ -656,9 +662,15 @@ h1 {
 
   .metronome-panel {
     grid-column: 1;
+    grid-row: 2;
   }
 
+  /* Bottom-align (rather than stretch) so its own edge meets the score
+     panel's bottom edge, even though the score panel is often taller than
+     metronome-panel + controls-panel combined. */
   .controls-panel {
     grid-column: 1;
+    grid-row: 3;
+    align-self: end;
   }
 }

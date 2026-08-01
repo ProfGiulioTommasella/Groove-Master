@@ -190,6 +190,7 @@ export function initHome() {
 
   startBtn.addEventListener('click', () => {
     if (!isPoolValid(state.pool)) return;
+    playUIClick();
     persist();
     startGame(state);
   });

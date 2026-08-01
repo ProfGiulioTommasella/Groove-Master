@@ -121,7 +121,6 @@ bpmPlus.addEventListener('click', () => {
 });
 
 metronomeBtn.addEventListener('click', async () => {
-  playUIClick();
   if (!metronome) metronome = createMetronome(() => currentState.bpm);
   if (metronome.isRunning) {
     stopMetronome();
