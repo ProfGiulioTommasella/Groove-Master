@@ -3,6 +3,7 @@ import { PRESETS, MIN_LEVEL, MAX_LEVEL, LEVEL_NAMES, levelColor } from './preset
 import { loadState, saveState, DEFAULT_STATE } from './state.js';
 import { renderPatternCells } from './patternView.js';
 import { startGame, registerHomeReset } from './game.js';
+import { playUIClick } from './audio.js';
 
 const TIME_SIGNATURES = [2, 3, 4];
 const KNOB_ARC_DEGREES = 270;
@@ -38,10 +39,14 @@ function createKnob(container, { steps, onAdvance }) {
 
   container.append(ticks, face);
 
-  container.addEventListener('click', onAdvance);
+  container.addEventListener('click', () => {
+    playUIClick();
+    onAdvance();
+  });
   container.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
+      playUIClick();
       onAdvance();
     }
   });
@@ -164,6 +169,7 @@ export function initHome() {
       lever.classList.toggle('engaged', state.pool.includes(figure.id));
 
       lever.addEventListener('click', () => {
+        playUIClick();
         const idx = state.pool.indexOf(figure.id);
         if (idx >= 0) {
           state.pool.splice(idx, 1);
@@ -183,6 +189,7 @@ export function initHome() {
 
   startBtn.addEventListener('click', () => {
     if (!isPoolValid(state.pool)) return;
+    playUIClick();
     persist();
     startGame(state);
   });

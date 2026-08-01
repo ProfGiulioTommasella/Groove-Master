@@ -1,6 +1,6 @@
 import { figureById } from './figures.js';
 import { generateSequence, sequenceToGrid } from './sequence.js';
-import { createMetronome, playSequenceOnce } from './audio.js';
+import { createMetronome, playSequenceOnce, playUIClick } from './audio.js';
 import { saveState, BPM_MIN, BPM_MAX, BPM_STEP } from './state.js';
 import { renderPatternCells } from './patternView.js';
 
@@ -107,18 +107,21 @@ function stopMetronome() {
 }
 
 bpmMinus.addEventListener('click', () => {
+  playUIClick();
   currentState.bpm = Math.max(BPM_MIN, currentState.bpm - BPM_STEP);
   refreshBpmUI();
   saveState(currentState);
 });
 
 bpmPlus.addEventListener('click', () => {
+  playUIClick();
   currentState.bpm = Math.min(BPM_MAX, currentState.bpm + BPM_STEP);
   refreshBpmUI();
   saveState(currentState);
 });
 
 metronomeBtn.addEventListener('click', async () => {
+  playUIClick();
   if (!metronome) metronome = createMetronome(() => currentState.bpm);
   if (metronome.isRunning) {
     stopMetronome();
@@ -130,6 +133,7 @@ metronomeBtn.addEventListener('click', async () => {
 });
 
 refreshBtn.addEventListener('click', () => {
+  playUIClick();
   stopListen();
   stopMetronome();
   currentSequence = generateSequence(currentState.pool, currentState.time);
@@ -137,12 +141,14 @@ refreshBtn.addEventListener('click', () => {
 });
 
 tipBtn.addEventListener('click', () => {
+  playUIClick();
   tipOn = !tipOn;
   tipBtn.classList.toggle('active', tipOn);
   renderScore();
 });
 
 listenBtn.addEventListener('click', () => {
+  playUIClick();
   if (listenController) {
     stopListen();
     return;
@@ -161,6 +167,7 @@ listenBtn.addEventListener('click', () => {
 });
 
 backHomeBtn.addEventListener('click', () => {
+  playUIClick();
   stopListen();
   stopMetronome();
   onHomeReset?.();

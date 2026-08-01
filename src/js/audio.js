@@ -45,6 +45,26 @@ function playSyntheticTick(ctx, when, { frequency = 1400, duration = 0.05 } = {}
   return { node: osc, endTime: when + duration };
 }
 
+// A short, dry mechanical "tock" for UI feedback (buttons, knobs, levers) -
+// quieter and shorter than the metronome/rhythm ticks so it stays a subtle
+// accent even when clicked repeatedly in quick succession.
+const UI_CLICK_GAIN = 0.18;
+
+export function playUIClick() {
+  const ctx = getContext();
+  const when = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(3200, when);
+  gain.gain.setValueAtTime(UI_CLICK_GAIN, when);
+  gain.gain.exponentialRampToValueAtTime(0.001, when + 0.02);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(when);
+  osc.stop(when + 0.02);
+}
+
 function silenceNow(ctx, node) {
   try {
     node.stop(ctx.currentTime);
