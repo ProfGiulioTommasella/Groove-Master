@@ -73,11 +73,42 @@ h1 {
 
 .panel {
   position: relative;
-  background: linear-gradient(165deg, var(--panel-bg), var(--panel-bg-alt));
+  /* Brushed-metal plate: fine diagonal grain + noise grit under the same
+     navy gradient as before, plus a soft sheen catching light top-left. */
+  background:
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.028) 0px, rgba(255, 255, 255, 0.028) 1px, transparent 1px, transparent 3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 26% -10%, rgba(255, 255, 255, 0.07), transparent 55%),
+    linear-gradient(165deg, var(--panel-bg), var(--panel-bg-alt));
   clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
-  box-shadow: inset 0 0 0 1px var(--accent), 0 0 20px -6px var(--accent-glow);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 0 20px -6px var(--accent-glow), 0 6px 16px -6px rgba(0, 0, 0, 0.6);
   padding: 1.1rem 1.3rem;
   margin-bottom: 1.1rem;
+}
+
+/* Decorative rivets on the panel's two square corners (the other two are
+   already chamfered by the clip-path, so a bolt there would sit on a cut
+   edge instead of a real corner). */
+.panel::before,
+.panel::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, #aab4bb, #3a4249 65%, #1c2226 100%);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5), inset 0 -1px 1px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.panel::before {
+  top: 7px;
+  right: 7px;
+}
+
+.panel::after {
+  bottom: 7px;
+  left: 7px;
 }
 
 .panel h2 {
@@ -103,16 +134,23 @@ h1 {
 .chip {
   clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
   border: 1px solid var(--accent);
-  background: rgba(0, 20, 28, 0.6);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 20, 28, 0.6) 40%);
   color: var(--ink);
   padding: 0.5rem 1rem;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(0);
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.08s;
 }
 
 .chip:hover {
-  box-shadow: 0 0 10px -2px var(--accent-glow);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4), 0 0 10px -2px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.chip:active {
+  transform: translateY(2px);
+  box-shadow: none;
 }
 
 .chip.active {
@@ -133,8 +171,10 @@ h1 {
   padding: 0.3rem 0.7rem;
 }
 
-.chip-custom:hover {
+.chip-custom:hover,
+.chip-custom:active {
   box-shadow: none;
+  transform: none;
 }
 
 .chip-custom.active {
@@ -157,16 +197,23 @@ h1 {
   height: 2.5rem;
   border-radius: 50%;
   border: 1px solid var(--accent);
-  background: rgba(0, 20, 28, 0.6);
+  background: radial-gradient(circle at 32% 28%, #1c333f, #071118 70%);
   color: var(--ink);
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
-  transition: box-shadow 0.15s;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: box-shadow 0.15s, transform 0.08s;
 }
 
 .bpm-control button:hover:not(:disabled) {
-  box-shadow: 0 0 10px -2px var(--accent-glow);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 10px -2px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.bpm-control button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .bpm-control button:disabled {
@@ -293,8 +340,35 @@ h1 {
   height: 56px;
   margin: 10px auto;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #26394a, #081119 70%);
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.65), 0 0 0 2px var(--border), 0 2px 6px rgba(0, 0, 0, 0.5);
+  background: radial-gradient(circle at 32% 26%, #34495c 0%, #182632 45%, #060b10 100%);
+  box-shadow:
+    inset 0 3px 4px rgba(255, 255, 255, 0.1),
+    inset 0 -5px 8px rgba(0, 0, 0, 0.75),
+    0 0 0 2px var(--border),
+    0 5px 10px -1px rgba(0, 0, 0, 0.65),
+    0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: box-shadow 0.1s;
+}
+
+/* Glossy highlight, like light catching a rounded plastic/metal cap. */
+.knob-face::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 9px;
+  width: 20px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.22), transparent 70%);
+  pointer-events: none;
+}
+
+.knob:active .knob-face {
+  box-shadow:
+    inset 0 3px 5px rgba(0, 0, 0, 0.8),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.05),
+    0 0 0 2px var(--border),
+    0 2px 4px -1px rgba(0, 0, 0, 0.6);
 }
 
 .knob-pointer {
@@ -304,10 +378,10 @@ h1 {
   width: 3px;
   height: 22px;
   margin: -22px 0 0 -1.5px;
-  background: var(--accent);
+  background: linear-gradient(180deg, var(--accent), #0aa8bc);
   border-radius: 2px;
   transform-origin: 50% 100%;
-  box-shadow: 0 0 6px var(--accent-glow);
+  box-shadow: 0 0 6px var(--accent-glow), 0 1px 1px rgba(0, 0, 0, 0.5);
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, box-shadow 0.2s;
 }
 
@@ -354,10 +428,12 @@ h1 {
   width: 30px;
   height: 60px;
   margin-top: 0.5rem;
-  background: linear-gradient(180deg, #1a2b38, #0a1620);
+  background: linear-gradient(180deg, #14212b, #050a0e);
   border: 1px solid var(--border);
   border-radius: 6px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  /* Carved-channel look: strong inner shadow at the top, a hint of light
+     escaping the groove at the bottom. */
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.8), inset 0 -1px 0 rgba(255, 255, 255, 0.05), 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .lever-led {
@@ -368,14 +444,14 @@ h1 {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #2a1010;
-  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8);
+  background: radial-gradient(circle at 34% 28%, #4a2020, #1a0d0d 70%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.8), inset 0 -1px 1px rgba(255, 255, 255, 0.05);
   transition: background 0.15s, box-shadow 0.15s;
 }
 
 .lever-unit.engaged .lever-led {
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent-glow), inset 0 0 2px rgba(255, 255, 255, 0.5);
+  background: radial-gradient(circle at 34% 28%, #baffff, var(--accent) 60%);
+  box-shadow: 0 0 8px var(--accent-glow), inset 0 -1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .lever-thumb {
@@ -386,14 +462,25 @@ h1 {
   height: 22px;
   margin-left: -11px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #4a5f6e, #182631 70%);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-  transition: top 0.18s ease, background 0.18s;
+  background: radial-gradient(circle at 32% 25%, #647c8c, #202e37 65%, #0d1519 100%);
+  box-shadow:
+    0 3px 5px rgba(0, 0, 0, 0.65),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.5);
+  transition: top 0.18s ease, background 0.18s, box-shadow 0.18s;
 }
 
 .lever-unit.engaged .lever-thumb {
   top: 34px;
-  background: radial-gradient(circle at 35% 30%, var(--accent), #027a8a 70%);
+  background: radial-gradient(circle at 32% 25%, #8ff5ff, var(--accent) 55%, #027a8a 100%);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    0 0 10px var(--accent-glow);
+}
+
+.lever-unit:active .lever-thumb {
+  transform: scale(0.92);
 }
 
 .pattern {
@@ -446,10 +533,19 @@ h1 {
   text-transform: uppercase;
   border: 1px solid var(--accent);
   clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-  background: var(--accent);
+  background: linear-gradient(180deg, #6ff3ff, var(--accent) 55%, #00b6cc);
   color: var(--accent-ink);
   cursor: pointer;
-  box-shadow: 0 0 18px var(--accent-glow);
+  /* Chunky button ledge: a hard "riser" shadow beneath, like it's raised
+     off the panel, so pressing it can visibly sink back down. */
+  box-shadow: 0 4px 0 #00838f, 0 8px 16px -4px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(0);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.start-btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #00838f, 0 4px 10px -4px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .start-btn:disabled {
