@@ -39,36 +39,31 @@
     </section>
 
     <section id="screen-game" class="screen hidden">
-      <h1>Groove Master</h1>
+      <div class="game-console" id="game-console">
+        <img class="console-bg" src="assets/game-vertical-v2/PLANCIA VERT GAME OK - sfondo.png" alt="Groove Master">
 
-      <div class="panel score-panel">
-        <h2>Score</h2>
-        <div id="score" class="score"></div>
-      </div>
-
-      <div class="panel metronome-panel">
-        <h2>Metronome</h2>
-        <div class="bpm-control">
-          <button type="button" id="bpm-minus" aria-label="Decrease BPM">&minus;</button>
-          <span id="bpm-value">60</span>
-          <span class="unit">BPM</span>
-          <button type="button" id="bpm-plus" aria-label="Increase BPM">+</button>
+        <div class="readout-box bpm-readout-box">
+          <div class="bpm-control">
+            <button type="button" id="bpm-minus" aria-label="Decrease BPM">&minus;</button>
+            <span id="bpm-value">60</span>
+            <span class="unit">BPM</span>
+            <button type="button" id="bpm-plus" aria-label="Increase BPM">+</button>
+          </div>
         </div>
-        <button type="button" id="metronome-btn" class="chip action-chip metronome-btn">&#9654; Start</button>
-      </div>
 
-      <div class="panel controls-panel">
-        <div class="button-group">
-          <button type="button" id="refresh-btn" class="chip action-chip">&#8635; Refresh</button>
-          <button type="button" id="tip-btn" class="chip action-chip">Tip</button>
-          <button type="button" id="listen-btn" class="chip action-chip">&#9654; Listen</button>
-          <button type="button" id="back-home" class="chip action-chip">&larr; Home</button>
+        <button type="button" class="metronome-hit" id="metronome-btn" aria-label="Start or stop the metronome">&#9654; Start</button>
+
+        <div class="score-frame">
+          <div id="score" class="score"></div>
         </div>
+
+        <button type="button" class="action-hit action-hit-1" id="refresh-btn" aria-label="Refresh the pattern"></button>
+        <button type="button" class="action-hit action-hit-2" id="tip-btn" aria-label="Toggle syllable tip"></button>
+        <button type="button" class="action-hit action-hit-3" id="listen-btn" aria-label="Listen to the pattern"></button>
+        <button type="button" class="action-hit action-hit-4" id="back-home" aria-label="Back to Home"></button>
       </div>
     </section>
   </main>
-
-  <footer class="credit">by Prof. Giulio Tommasella</footer>
 
   <script type="module" src="src/js/main.js"></script>
 </body>

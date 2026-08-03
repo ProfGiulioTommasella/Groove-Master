@@ -96,7 +96,9 @@ function stopListen() {
     listenController.stop();
     listenController = null;
   }
-  listenBtn.textContent = '▶ Listen';
+  // "Listen" is a static printed label on the console art, so playing state
+  // is shown as a glow instead of swapping text (see .action-hit.active).
+  listenBtn.classList.remove('active');
 }
 
 function stopMetronome() {
@@ -158,13 +160,13 @@ listenBtn.addEventListener('click', () => {
   }
   stopMetronome();
   const grid = sequenceToGrid(currentSequence);
-  listenBtn.textContent = '■ Stop';
+  listenBtn.classList.add('active');
   listenController = playSequenceOnce(grid, currentState.bpm, {
     countInBeats: currentState.time,
     onStep: highlightStep,
     onEnd: () => {
       listenController = null;
-      listenBtn.textContent = '▶ Listen';
+      listenBtn.classList.remove('active');
     },
   });
 });
@@ -187,7 +189,6 @@ export function startGame(state) {
   currentSequence = generateSequence(currentState.pool, currentState.time);
   refreshBpmUI();
   renderScore();
-  document.body.classList.remove('home-active');
   screenHome.classList.add('hidden');
   screenGame.classList.remove('hidden');
 }

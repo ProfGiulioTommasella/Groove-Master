@@ -70,7 +70,6 @@ export function initHome() {
   // Time signature and difficulty always start over at 2/4 + Beginner,
   // both on first load and whenever Home is shown again; only BPM persists.
   applyHomeDefaults(state);
-  document.body.classList.add('home-active');
 
   const timeKnob = document.getElementById('time-knob');
   const levelKnob = document.getElementById('level-knob');
@@ -219,7 +218,6 @@ export function initHome() {
 
   registerHomeReset(() => {
     applyHomeDefaults(state);
-    document.body.classList.add('home-active');
     persist();
     refreshTimeUI();
     refreshLevelUI();
