@@ -3,7 +3,7 @@ import { PRESETS } from './presets.js';
 const STORAGE_KEY = 'groove-master:home-config';
 
 export const BPM_MIN = 50;
-export const BPM_MAX = 140;
+export const BPM_MAX = 150;
 export const BPM_STEP = 5;
 
 export const DEFAULT_STATE = {

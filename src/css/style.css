@@ -145,57 +145,6 @@ h1 {
   font-weight: 600;
 }
 
-.bpm-control {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-.bpm-control button {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  background: radial-gradient(circle at 32% 28%, #1c333f, #071118 70%);
-  color: var(--ink);
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  transform: translateY(0);
-  transition: box-shadow 0.15s, transform 0.08s;
-}
-
-.bpm-control button:hover:not(:disabled) {
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 10px -2px var(--accent-glow), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.bpm-control button:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-.bpm-control button:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-#bpm-value {
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 1.6rem;
-  font-weight: 600;
-  min-width: 3ch;
-  text-align: center;
-  color: var(--accent);
-  text-shadow: 0 0 8px var(--accent-glow);
-}
-
-.unit {
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
 .figure-img {
   max-width: 100%;
   height: 42px;
@@ -445,7 +394,10 @@ h1 {
 .score {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  /* Spread the 4 bars across whatever height the screen area has, instead
+     of stacking them from the top and leaving the rest of the screen bare. */
+  justify-content: space-between;
+  gap: 0.3rem;
   background: var(--screen-bg);
   border-radius: 6px;
   padding: 0.5rem 0.7rem;
@@ -486,54 +438,50 @@ h1 {
   aspect-ratio: 1170 / 2532;
 }
 
+/* BPM number: matched to where the minus/plus icon buttons flank it (their
+   own printed position didn't line up with the number slot the design file
+   specified, so this uses the empirical midpoint between them instead). */
 .bpm-readout-box {
-  left: 31.62%;
-  top: 18.88%;
-  width: 35.47%;
-  height: 5.73%;
+  left: 40.26%;
+  top: 18.69%;
+  width: 20%;
+  height: 6%;
 }
 
-.bpm-readout-box .bpm-control {
-  gap: 0.4rem;
-}
-
-.bpm-readout-box .bpm-control button {
-  width: 1.6rem;
-  height: 1.6rem;
-  font-size: 1rem;
-}
-
-.bpm-readout-box #bpm-value {
-  font-size: 1.05rem;
-}
-
-.bpm-readout-box .unit {
-  font-size: 0.7rem;
-}
-
-.metronome-hit {
+/* Minus/plus and Start/Stop are real button graphics now (not text), each
+   positioned at its own printed location - Start/Stop is one wide plate
+   split into two separate press zones (play left half, stop right half). */
+.bpm-icon-btn,
+.metronome-transport-btn {
   position: absolute;
-  left: 30.94%;
-  top: 25.67%;
-  width: 41.62%;
-  height: 4.82%;
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  color: var(--accent);
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 8px var(--accent-glow);
+  border: none;
+  padding: 0;
   cursor: pointer;
-  transition: background 0.15s, box-shadow 0.15s;
+  outline: none;
 }
 
-.metronome-hit:hover,
-.metronome-hit:focus-visible {
-  background: rgba(0, 229, 255, 0.08);
-  box-shadow: inset 0 0 0 1px var(--accent);
-  outline: none;
+.bpm-icon-btn img,
+.metronome-transport-btn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.bpm-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.bpm-minus-btn { left: 13.85%; top: 19.12%; width: 12.39%; height: 5.13%; }
+.bpm-plus-btn { left: 74.36%; top: 19.04%; width: 12.14%; height: 5.06%; }
+.metronome-start-btn { left: 34.36%; top: 24.96%; width: 14.7%; height: 5.21%; }
+.metronome-stop-btn { left: 49.15%; top: 24.96%; width: 14.7%; height: 5.21%; }
+
+.metronome-transport-btn.active {
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px var(--accent), 0 0 14px -2px var(--accent-glow);
 }
 
 .score-frame {
@@ -580,3 +528,21 @@ h1 {
 .action-hit-2 { left: 30.0%; top: 77.61%; }
 .action-hit-3 { left: 52.82%; top: 77.53%; }
 .action-hit-4 { left: 75.56%; top: 77.53%; }
+
+/* Decorative icons sitting in the empty space above each button's printed
+   label - purely visual, the .action-hit square underneath handles clicks. */
+.action-icon {
+  position: absolute;
+  pointer-events: none;
+}
+
+.action-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.action-icon-1 { left: 10.34%; top: 77.61%; width: 9.15%; height: 4.62%; }
+.action-icon-2 { left: 33.0%; top: 77.65%; width: 9.91%; height: 4.78%; }
+.action-icon-3 { left: 53.76%; top: 77.01%; width: 13.85%; height: 5.41%; }
+.action-icon-4 { left: 77.95%; top: 77.09%; width: 11.62%; height: 5.45%; }

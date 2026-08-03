@@ -20,17 +20,19 @@ export function registerHomeReset(fn) {
 const screenHome = document.getElementById('screen-home');
 const screenGame = document.getElementById('screen-game');
 const scoreEl = document.getElementById('score');
-const bpmValue = document.getElementById('bpm-value');
+const bpmReadout = document.getElementById('bpm-readout');
 const bpmMinus = document.getElementById('bpm-minus');
 const bpmPlus = document.getElementById('bpm-plus');
-const metronomeBtn = document.getElementById('metronome-btn');
+const metronomeStartBtn = document.getElementById('metronome-start-btn');
+const metronomeStopBtn = document.getElementById('metronome-stop-btn');
 const refreshBtn = document.getElementById('refresh-btn');
 const tipBtn = document.getElementById('tip-btn');
 const listenBtn = document.getElementById('listen-btn');
 const backHomeBtn = document.getElementById('back-home');
 
 function refreshBpmUI() {
-  bpmValue.textContent = String(currentState.bpm);
+  bpmReadout.src = `assets/game-vertical-v2/parts/bpm-${currentState.bpm}.png`;
+  bpmReadout.alt = `${currentState.bpm} BPM`;
   bpmMinus.disabled = currentState.bpm <= BPM_MIN;
   bpmPlus.disabled = currentState.bpm >= BPM_MAX;
 }
@@ -105,7 +107,7 @@ function stopMetronome() {
   if (metronome && metronome.isRunning) {
     metronome.stop();
   }
-  metronomeBtn.textContent = '▶ Start';
+  metronomeStartBtn.classList.remove('active');
 }
 
 bpmMinus.addEventListener('click', () => {
@@ -122,15 +124,18 @@ bpmPlus.addEventListener('click', () => {
   saveState(currentState);
 });
 
-metronomeBtn.addEventListener('click', async () => {
+// Start and Stop are two separate physical buttons on this console (not a
+// single toggle) - pressing Start while already running is a no-op.
+metronomeStartBtn.addEventListener('click', async () => {
   if (!metronome) metronome = createMetronome(() => currentState.bpm);
-  if (metronome.isRunning) {
-    stopMetronome();
-  } else {
-    stopListen();
-    await metronome.start();
-    metronomeBtn.textContent = '■ Stop';
-  }
+  if (metronome.isRunning) return;
+  stopListen();
+  await metronome.start();
+  metronomeStartBtn.classList.add('active');
+});
+
+metronomeStopBtn.addEventListener('click', () => {
+  stopMetronome();
 });
 
 refreshBtn.addEventListener('click', () => {

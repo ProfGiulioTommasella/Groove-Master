@@ -43,15 +43,21 @@
         <img class="console-bg" src="assets/game-vertical-v2/PLANCIA VERT GAME OK - sfondo.png" alt="Groove Master">
 
         <div class="readout-box bpm-readout-box">
-          <div class="bpm-control">
-            <button type="button" id="bpm-minus" aria-label="Decrease BPM">&minus;</button>
-            <span id="bpm-value">60</span>
-            <span class="unit">BPM</span>
-            <button type="button" id="bpm-plus" aria-label="Increase BPM">+</button>
-          </div>
+          <img id="bpm-readout" src="assets/game-vertical-v2/parts/bpm-60.png" alt="60 BPM">
         </div>
+        <button type="button" class="bpm-icon-btn bpm-minus-btn" id="bpm-minus" aria-label="Decrease BPM">
+          <img src="assets/game-vertical-v2/parts/metronome-minus.png" alt="">
+        </button>
+        <button type="button" class="bpm-icon-btn bpm-plus-btn" id="bpm-plus" aria-label="Increase BPM">
+          <img src="assets/game-vertical-v2/parts/metronome-plus.png" alt="">
+        </button>
 
-        <button type="button" class="metronome-hit" id="metronome-btn" aria-label="Start or stop the metronome">&#9654; Start</button>
+        <button type="button" class="metronome-transport-btn metronome-start-btn" id="metronome-start-btn" aria-label="Start the metronome">
+          <img src="assets/game-vertical-v2/parts/metronome-start.png" alt="">
+        </button>
+        <button type="button" class="metronome-transport-btn metronome-stop-btn" id="metronome-stop-btn" aria-label="Stop the metronome">
+          <img src="assets/game-vertical-v2/parts/metronome-stop.png" alt="">
+        </button>
 
         <div class="score-frame">
           <div id="score" class="score"></div>
@@ -61,6 +67,11 @@
         <button type="button" class="action-hit action-hit-2" id="tip-btn" aria-label="Toggle syllable tip"></button>
         <button type="button" class="action-hit action-hit-3" id="listen-btn" aria-label="Listen to the pattern"></button>
         <button type="button" class="action-hit action-hit-4" id="back-home" aria-label="Back to Home"></button>
+
+        <div class="action-icon action-icon-1"><img src="assets/game-vertical-v2/parts/btn-refresh.png" alt=""></div>
+        <div class="action-icon action-icon-2"><img src="assets/game-vertical-v2/parts/btn-tip.png" alt=""></div>
+        <div class="action-icon action-icon-3"><img src="assets/game-vertical-v2/parts/btn-listen.png" alt=""></div>
+        <div class="action-icon action-icon-4"><img src="assets/game-vertical-v2/parts/btn-home.png" alt=""></div>
       </div>
     </section>
   </main>
