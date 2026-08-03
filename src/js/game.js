@@ -115,6 +115,11 @@ bpmMinus.addEventListener('click', () => {
   currentState.bpm = Math.max(BPM_MIN, currentState.bpm - BPM_STEP);
   refreshBpmUI();
   saveState(currentState);
+  // Listen bakes the BPM into its schedule up front (unlike the metronome,
+  // which reads currentState.bpm live on every tick), so a mid-playback
+  // change would silently keep playing at the old speed - stop it instead
+  // and make the user re-trigger Listen to hear the new tempo.
+  stopListen();
 });
 
 bpmPlus.addEventListener('click', () => {
@@ -122,6 +127,7 @@ bpmPlus.addEventListener('click', () => {
   currentState.bpm = Math.min(BPM_MAX, currentState.bpm + BPM_STEP);
   refreshBpmUI();
   saveState(currentState);
+  stopListen();
 });
 
 metronomeBtn.addEventListener('click', async () => {

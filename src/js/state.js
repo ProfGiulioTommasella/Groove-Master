@@ -8,7 +8,7 @@ export const BPM_STEP = 5;
 
 export const DEFAULT_STATE = {
   time: 2,
-  bpm: 60,
+  bpm: 80,
   level: 1,
   pool: [...PRESETS[1]],
 };
