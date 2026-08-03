@@ -71,11 +71,38 @@ export function playUIClick() {
   playClick(getContext(), { frequency: 1400, duration: 0.02 });
 }
 
-// Lever toggle: a rounder, thicker "clack" (triangle wave) distinct from the
-// button click, pitched up when engaging and down when disengaging - like a
-// real flip switch sounds different in each direction.
-export function playLeverClick(engaged) {
-  playClick(getContext(), { frequency: engaged ? 1000 : 700, duration: 0.025, type: 'triangle' });
+// Lever toggle: recorded "on"/"off" switch samples, decoded once and cached
+// - distinct from the synthesized button click, and different per direction
+// like a real flip switch.
+const SWITCH_SAMPLE_URLS = {
+  on: 'assets/audio/switch-on.mp3',
+  off: 'assets/audio/switch-off.mp3',
+};
+const switchBuffers = {};
+
+function loadSwitchBuffer(ctx, key) {
+  if (!switchBuffers[key]) {
+    switchBuffers[key] = fetch(SWITCH_SAMPLE_URLS[key])
+      .then((res) => res.arrayBuffer())
+      .then((data) => ctx.decodeAudioData(data));
+  }
+  return switchBuffers[key];
+}
+
+export async function playLeverClick(engaged) {
+  const ctx = getContext();
+  try {
+    const buffer = await loadSwitchBuffer(ctx, engaged ? 'on' : 'off');
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    const gain = ctx.createGain();
+    gain.gain.value = UI_CLICK_GAIN * 2;
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    source.start(ctx.currentTime);
+  } catch {
+    // Sample failed to load/decode - silently skip rather than break the toggle.
+  }
 }
 
 function silenceNow(ctx, node) {
