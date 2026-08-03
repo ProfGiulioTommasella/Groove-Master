@@ -140,7 +140,12 @@ refreshBtn.addEventListener('click', () => {
 });
 
 tipBtn.addEventListener('click', () => {
-  playUIClick();
+  // Skip the click while the Metronome or Listen is sounding - same reason
+  // their own start controls stay silent: it reads as noise on top of an
+  // already-running beat instead of distinct feedback.
+  if (!(metronome && metronome.isRunning) && !listenController) {
+    playUIClick();
+  }
   tipOn = !tipOn;
   tipBtn.classList.toggle('active', tipOn);
   renderScore();
