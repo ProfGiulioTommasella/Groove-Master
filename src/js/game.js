@@ -187,6 +187,7 @@ export function startGame(state) {
   currentSequence = generateSequence(currentState.pool, currentState.time);
   refreshBpmUI();
   renderScore();
+  document.body.classList.remove('home-active');
   screenHome.classList.add('hidden');
   screenGame.classList.remove('hidden');
 }

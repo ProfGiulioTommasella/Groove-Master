@@ -9,44 +9,33 @@
 <body>
   <main id="app">
     <section id="screen-home" class="screen">
-      <h1>Groove Master</h1>
+      <div class="console" id="console">
+        <img class="console-bg" src="assets/home-vertical-v2/PLANCIA VERT Empty - 9 leve.png" alt="Groove Master">
 
-      <div class="panel readout-panel">
-        <div class="readout-screen">
-          <div class="readout-row">
-            <span class="readout-label">Time</span>
-            <span id="display-time" class="readout-value">4/4</span>
-          </div>
-          <div class="readout-row">
-            <span class="readout-label">Level</span>
-            <span id="display-level" class="readout-value">Beginner</span>
-          </div>
-          <p id="pool-warning" class="warning hidden">
-            Select at least one one-movement figure (quarter note or one of its variants)
-            so the last movement of the bar always has a candidate.
-          </p>
+        <div class="readout-box readout-box-time">
+          <img id="time-readout" src="assets/home-vertical-v2/parts/time-2.png" alt="Time signature">
         </div>
-      </div>
-
-      <div class="panel console-panel">
-        <div class="knob-unit">
-          <div class="knob" id="time-knob" tabindex="0" role="button" aria-label="Time signature"></div>
-          <span class="knob-label">Time signature</span>
+        <div class="readout-box readout-box-level">
+          <img id="level-readout" src="assets/home-vertical-v2/parts/level-1.png" alt="Level">
         </div>
-        <div class="knob-unit">
-          <div class="knob" id="level-knob" tabindex="0" role="button" aria-label="Level"></div>
-          <span class="knob-label">Level</span>
-          <span class="chip chip-custom" id="custom-indicator">Custom</span>
-        </div>
+
+        <button type="button" class="knob-hit knob-hit-time" id="time-knob" aria-label="Change time signature">
+          <img src="assets/home-vertical-v2/parts/knob-time.png" alt="">
+        </button>
+        <button type="button" class="knob-hit knob-hit-level" id="level-knob" aria-label="Change level">
+          <img src="assets/home-vertical-v2/parts/knob-level.png" alt="">
+        </button>
+
+        <div class="fig-grid" id="fig-grid"></div>
+        <div class="pattern-slots" id="pattern-slots"></div>
       </div>
 
-      <div class="panel lever-deck-panel">
-        <div id="figure-picker" class="lever-deck"></div>
-      </div>
+      <p id="pool-warning" class="warning hidden">
+        Select at least one one-movement figure (quarter note or one of its variants)
+        so the last movement of the bar always has a candidate.
+      </p>
 
-      <div class="panel start-panel">
-        <button type="button" id="start-btn" class="start-btn" disabled>Start</button>
-      </div>
+      <button type="button" id="start-btn" class="start-btn console-start" disabled>Start</button>
     </section>
 
     <section id="screen-game" class="screen hidden">
