@@ -289,6 +289,10 @@ h1 {
   height: 100%;
   display: block;
   pointer-events: none;
+  /* Rotation angle is set inline per state (see home.js) - the knob art
+     itself doesn't change, it just spins to point at the current value,
+     same as the design file's per-position rotations. */
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .knob-hit:focus-visible {
@@ -297,17 +301,17 @@ h1 {
 }
 
 .knob-hit-time {
-  left: 17.25%;
-  top: 56.23%;
-  width: 19.37%;
-  height: 8.72%;
+  left: 16.2%;
+  top: 55.63%;
+  width: 19.25%;
+  height: 8.67%;
 }
 
 .knob-hit-level {
-  left: 61.39%;
-  top: 56.23%;
-  width: 19.48%;
-  height: 8.72%;
+  left: 60.8%;
+  top: 55.63%;
+  width: 19.37%;
+  height: 8.67%;
 }
 
 /* The big idle screen doubles as the figure picker: tapping a note toggles

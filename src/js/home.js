@@ -6,6 +6,11 @@ import { playUIClick, playLeverClick } from './audio.js';
 
 const TIME_SIGNATURES = [2, 3, 4];
 
+// Exact rotation angles from the console design file (one knob graphic,
+// spun to point at each value - there's no separate art per position).
+const TIME_KNOB_ROTATION = { 2: -115, 3: 0, 4: 115 };
+const LEVEL_KNOB_ROTATION = { 1: -145, 2: -115, 3: -90, 4: -45, 5: 0, 6: 45, 7: 90, 8: 115, 9: 145 };
+
 // Left-to-right order of the 9 physical switches - fixed, matches the order
 // the console artwork was designed in. Half note/rest (ids 1-2) have no
 // switch of their own: they ride along automatically with every preset and
@@ -69,6 +74,8 @@ export function initHome() {
 
   const timeKnob = document.getElementById('time-knob');
   const levelKnob = document.getElementById('level-knob');
+  const timeKnobImg = document.getElementById('time-knob-img');
+  const levelKnobImg = document.getElementById('level-knob-img');
   const timeReadout = document.getElementById('time-readout');
   const levelReadout = document.getElementById('level-readout');
   const figGrid = document.getElementById('fig-grid');
@@ -83,6 +90,7 @@ export function initHome() {
   function refreshTimeUI() {
     timeReadout.src = `${PARTS}time-${state.time}.png`;
     timeReadout.alt = `Time signature ${state.time}/4`;
+    timeKnobImg.style.transform = `rotate(${TIME_KNOB_ROTATION[state.time]}deg)`;
   }
 
   function refreshLevelUI() {
@@ -90,6 +98,7 @@ export function initHome() {
     const shown = matchedLevel ?? 9;
     levelReadout.src = `${PARTS}level-${shown}.png`;
     levelReadout.alt = matchedLevel ? `Level ${matchedLevel}` : 'Level: Custom';
+    levelKnobImg.style.transform = `rotate(${LEVEL_KNOB_ROTATION[shown]}deg)`;
   }
 
   function refreshStartUI() {
