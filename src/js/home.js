@@ -2,7 +2,7 @@ import { figureById, isPoolValid } from './figures.js';
 import { PRESETS, MIN_LEVEL, MAX_LEVEL } from './presets.js';
 import { loadState, saveState, DEFAULT_STATE } from './state.js';
 import { startGame, registerHomeReset } from './game.js';
-import { playUIClick, playLeverClick } from './audio.js';
+import { playUIClick, playLeverClick, playTimeKnobClick, playLevelKnobClick } from './audio.js';
 
 const TIME_SIGNATURES = [2, 3, 4];
 
@@ -191,7 +191,7 @@ export function initHome() {
   }
 
   timeKnob.addEventListener('click', () => {
-    playUIClick();
+    playTimeKnobClick();
     const index = TIME_SIGNATURES.indexOf(state.time);
     state.time = TIME_SIGNATURES[(index + 1) % TIME_SIGNATURES.length];
     refreshTimeUI();
@@ -199,7 +199,7 @@ export function initHome() {
   });
 
   levelKnob.addEventListener('click', () => {
-    playUIClick();
+    playLevelKnobClick();
     state.level = state.level >= MAX_LEVEL ? MIN_LEVEL : state.level + 1;
     state.pool = [...PRESETS[state.level]];
     refreshLevelUI();

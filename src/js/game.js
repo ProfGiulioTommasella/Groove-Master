@@ -23,8 +23,8 @@ const scoreEl = document.getElementById('score');
 const bpmReadout = document.getElementById('bpm-readout');
 const bpmMinus = document.getElementById('bpm-minus');
 const bpmPlus = document.getElementById('bpm-plus');
-const metronomeStartBtn = document.getElementById('metronome-start-btn');
-const metronomeStopBtn = document.getElementById('metronome-stop-btn');
+const metronomeBtn = document.getElementById('metronome-btn');
+const metronomeBtnImg = document.getElementById('metronome-btn-img');
 const refreshBtn = document.getElementById('refresh-btn');
 const tipBtn = document.getElementById('tip-btn');
 const listenBtn = document.getElementById('listen-btn');
@@ -107,7 +107,7 @@ function stopMetronome() {
   if (metronome && metronome.isRunning) {
     metronome.stop();
   }
-  metronomeStartBtn.classList.remove('active');
+  metronomeBtnImg.src = 'assets/game-vertical-v2/parts/metronome-start.png';
 }
 
 bpmMinus.addEventListener('click', () => {
@@ -124,18 +124,15 @@ bpmPlus.addEventListener('click', () => {
   saveState(currentState);
 });
 
-// Start and Stop are two separate physical buttons on this console (not a
-// single toggle) - pressing Start while already running is a no-op.
-metronomeStartBtn.addEventListener('click', async () => {
+metronomeBtn.addEventListener('click', async () => {
   if (!metronome) metronome = createMetronome(() => currentState.bpm);
-  if (metronome.isRunning) return;
-  stopListen();
-  await metronome.start();
-  metronomeStartBtn.classList.add('active');
-});
-
-metronomeStopBtn.addEventListener('click', () => {
-  stopMetronome();
+  if (metronome.isRunning) {
+    stopMetronome();
+  } else {
+    stopListen();
+    await metronome.start();
+    metronomeBtnImg.src = 'assets/game-vertical-v2/parts/metronome-stop.png';
+  }
 });
 
 refreshBtn.addEventListener('click', () => {

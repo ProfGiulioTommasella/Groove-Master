@@ -71,38 +71,50 @@ export function playUIClick() {
   playClick(getContext(), { frequency: 1400, duration: 0.02 });
 }
 
-// Lever toggle: recorded "on"/"off" switch samples, decoded once and cached
-// - distinct from the synthesized button click, and different per direction
-// like a real flip switch.
-const SWITCH_SAMPLE_URLS = {
-  on: 'assets/audio/switch-on.mp3',
-  off: 'assets/audio/switch-off.mp3',
-};
-const switchBuffers = {};
+// Recorded-sample playback, decoded once per URL and cached for replay -
+// used for the lever switch and the Home knobs, each distinct from the
+// synthesized generic button click.
+const sampleBuffers = {};
 
-function loadSwitchBuffer(ctx, key) {
-  if (!switchBuffers[key]) {
-    switchBuffers[key] = fetch(SWITCH_SAMPLE_URLS[key])
+function loadSample(ctx, url) {
+  if (!sampleBuffers[url]) {
+    sampleBuffers[url] = fetch(url)
       .then((res) => res.arrayBuffer())
       .then((data) => ctx.decodeAudioData(data));
   }
-  return switchBuffers[key];
+  return sampleBuffers[url];
 }
 
-export async function playLeverClick(engaged) {
+async function playSample(url, gainValue = UI_CLICK_GAIN * 2) {
   const ctx = getContext();
   try {
-    const buffer = await loadSwitchBuffer(ctx, engaged ? 'on' : 'off');
+    const buffer = await loadSample(ctx, url);
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     const gain = ctx.createGain();
-    gain.gain.value = UI_CLICK_GAIN * 2;
+    gain.gain.value = gainValue;
     source.connect(gain);
     gain.connect(ctx.destination);
     source.start(ctx.currentTime);
   } catch {
-    // Sample failed to load/decode - silently skip rather than break the toggle.
+    // Sample failed to load/decode - silently skip rather than break the interaction.
   }
+}
+
+// Lever toggle: distinct "on"/"off" switch samples, like a real flip switch
+// sounding different in each direction.
+export function playLeverClick(engaged) {
+  return playSample(engaged ? 'assets/audio/switch-on.mp3' : 'assets/audio/switch-off.mp3');
+}
+
+// Home knobs: each has its own recorded detent sound, distinct from the
+// generic UI click used by every other button.
+export function playTimeKnobClick() {
+  return playSample('assets/audio/time-knob.mp3');
+}
+
+export function playLevelKnobClick() {
+  return playSample('assets/audio/level-knob.mp3');
 }
 
 function silenceNow(ctx, node) {
