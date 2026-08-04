@@ -333,43 +333,40 @@ h1 {
   margin: 0 auto 0.75rem;
 }
 
-.console-start {
-  display: block;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-.start-btn {
-  width: 100%;
-  padding: 0.9rem;
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  border: 1px solid var(--accent);
-  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-  background: linear-gradient(180deg, #6ff3ff, var(--accent) 55%, #00b6cc);
-  color: var(--accent-ink);
+/* Start is baked into the console art now (no separate CSS button below
+   it) - found a home in the decorative trapezoid strip that used to just
+   hold the 3 idle lights, sized/positioned by eye since this graphic's
+   own canvas doesn't match the console background's (see the BPM-number
+   and knob fixes for why coordinates don't transfer 1:1 between assets
+   exported from different files). */
+.start-icon-btn {
+  position: absolute;
+  left: 32.39%;
+  top: 88.25%;
+  width: 35.21%;
+  height: 7.69%;
+  background: transparent;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  /* Chunky button ledge: a hard "riser" shadow beneath, like it's raised
-     off the panel, so pressing it can visibly sink back down. */
-  box-shadow: 0 4px 0 #00838f, 0 8px 16px -4px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  transform: translateY(0);
-  transition: transform 0.08s, box-shadow 0.08s;
+  outline: none;
+  transition: transform 0.08s, filter 0.15s;
 }
 
-.start-btn:active:not(:disabled) {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 #00838f, 0 4px 10px -4px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+.start-icon-btn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
 }
 
-.start-btn:disabled {
-  background: rgba(0, 20, 28, 0.6);
-  border-color: var(--muted);
-  color: var(--muted);
+.start-icon-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.start-icon-btn:disabled {
+  filter: grayscale(1) brightness(0.6);
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 .placeholder-note {

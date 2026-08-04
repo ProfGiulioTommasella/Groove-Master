@@ -145,6 +145,10 @@ refreshBtn.addEventListener('click', () => {
   playUIClick();
   stopListen();
   stopMetronome();
+  // A new sequence should be sight-read, not handed over already solved -
+  // Tip would otherwise carry over from the previous pattern.
+  tipOn = false;
+  tipBtn.classList.remove('active');
   currentSequence = generateSequence(currentState.pool, currentState.time);
   renderScore();
 });
