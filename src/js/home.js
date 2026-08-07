@@ -46,14 +46,18 @@ const PATTERN_SHARED = {
 // The 9 lever slots there have no baked-in LED, so the LED sits in the gap
 // to the slot's right, at the slot's vertical mid-height - side-by-side with
 // the lever, matching the layout worked out by hand in elementi-2.png.
-const PATTERN_COLUMNS_H = [9.492, 17.339, 25.187, 32.810, 40.583, 48.356, 56.129, 63.901, 71.525]
+// Positions given directly by the console designer (measured in Canva
+// against a 2535x1170 export of the console art) and converted here to this
+// image's own 1338x704 canvas (scale /1.657 horizontally, /1.662 vertically,
+// then -98 on x for the black-margin crop applied when this asset was built).
+const PATTERN_COLUMNS_H = [10.196, 17.955, 25.671, 33.428, 41.190, 48.904, 56.641, 64.442, 72.176]
   .map((leverLeft) => ({
     leverLeft,
     led: leverLeft + 3.887, // slot centers are ~104px apart; +52px lands mid-gap
   }));
 
 const PATTERN_SHARED_H = {
-  leverWidth: 2.541, leverUpTop: 66.62, leverDownTop: 68.47, leverHeight: 13.92,
+  leverWidth: 2.541, leverUpTop: 64.87, leverDownTop: 74.31, leverHeight: 13.92,
   ledTop: 74.36, ledWidth: 2.093, ledHeight: 3.977,
 };
 

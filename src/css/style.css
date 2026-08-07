@@ -285,18 +285,21 @@ h1 {
    the reused vertical knob-time.png/knob-level.png dial art (measured off a
    differently-shaped socket), so unlike the vertical version these use
    object-fit: contain to avoid stretching the dial. */
+/* Positions given directly by the console designer (measured in Canva
+   against a 2535x1170 export of the console art), converted to this image's
+   own 1338x704 canvas the same way as PATTERN_COLUMNS_H in home.js. */
 .knob-hit-time-h {
-  left: 6.428%;
-  top: 35.938%;
-  width: 11.81%;
-  height: 19.318%;
+  left: 5.798%;
+  top: 35.746%;
+  width: 11.891%;
+  height: 22.089%;
 }
 
 .knob-hit-level-h {
-  left: 82.96%;
-  top: 43.75%;
-  width: 11.21%;
-  height: 17.045%;
+  left: 83.226%;
+  top: 42.108%;
+  width: 10.749%;
+  height: 19.97%;
 }
 
 .knob-hit-time-h img,
