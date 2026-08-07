@@ -48,8 +48,10 @@ const PATTERN_SHARED = {
 // the lever, matching the layout worked out by hand in elementi-2.png.
 // Positions given directly by the console designer, measured in a Canva
 // project built at this exact asset's own 1338x704 resolution (no unit
-// conversion needed - straight px/canvas-size).
-const PATTERN_COLUMNS_H = [9.529, 17.385, 25.104, 32.907, 40.717, 48.454, 56.339, 64.149, 71.958]
+// conversion needed - straight px/canvas-size). Columns 1-6 were then
+// reported ~9px left of their slot lane (7-9 were spot-on) and nudged right
+// to match.
+const PATTERN_COLUMNS_H = [10.202, 18.058, 25.777, 33.580, 41.390, 49.127, 56.339, 64.149, 71.958]
   .map((leverLeft) => ({
     leverLeft,
     led: leverLeft + 3.887, // slot centers are ~104px apart; +52px lands mid-gap
