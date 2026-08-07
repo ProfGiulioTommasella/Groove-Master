@@ -9,29 +9,52 @@
 <body>
   <main id="app">
     <section id="screen-home" class="screen">
-      <div class="console" id="console">
+      <div class="console console-vertical" id="console">
         <img class="console-bg" src="assets/home-vertical-v2/PLANCIA VERT Empty - 9 leve.png" alt="Groove Master">
 
         <div class="readout-box readout-box-time">
-          <img id="time-readout" src="assets/home-vertical-v2/parts/time-2.png" alt="Time signature">
+          <img class="js-time-readout" src="assets/home-vertical-v2/parts/time-2.png" alt="Time signature">
         </div>
         <div class="readout-box readout-box-level">
-          <img id="level-readout" src="assets/home-vertical-v2/parts/level-1.png" alt="Level">
+          <img class="js-level-readout" src="assets/home-vertical-v2/parts/level-1.png" alt="Level">
         </div>
 
-        <button type="button" class="knob-hit knob-hit-time" id="time-knob" aria-label="Change time signature">
-          <img id="time-knob-img" src="assets/home-vertical-v2/parts/knob-time.png" alt="">
+        <button type="button" class="knob-hit knob-hit-time js-time-knob" aria-label="Change time signature">
+          <img class="js-time-knob-img" src="assets/home-vertical-v2/parts/knob-time.png" alt="">
         </button>
-        <button type="button" class="knob-hit knob-hit-level" id="level-knob" aria-label="Change level">
-          <img id="level-knob-img" src="assets/home-vertical-v2/parts/knob-level.png" alt="">
+        <button type="button" class="knob-hit knob-hit-level js-level-knob" aria-label="Change level">
+          <img class="js-level-knob-img" src="assets/home-vertical-v2/parts/knob-level.png" alt="">
         </button>
 
-        <div class="fig-grid" id="fig-grid"></div>
-        <div class="pattern-slots" id="pattern-slots"></div>
+        <div class="fig-grid js-fig-grid"></div>
+        <div class="pattern-slots js-pattern-slots"></div>
 
-        <button type="button" class="start-icon-btn" id="start-btn" aria-label="Start" disabled>
+        <button type="button" class="start-icon-btn js-start-btn" aria-label="Start" disabled>
           <img src="assets/home-vertical-v2/parts/start-btn.png" alt="">
         </button>
+      </div>
+
+      <div class="console console-horizontal" id="console-h">
+        <img class="console-bg" src="assets/home-horizontal-v1/home-horizontal-console.png" alt="Groove Master">
+
+        <div class="readout-box readout-box-time-h">
+          <img class="js-time-readout" src="assets/home-vertical-v2/parts/time-2.png" alt="Time signature">
+        </div>
+        <div class="readout-box readout-box-level-h">
+          <img class="js-level-readout" src="assets/home-vertical-v2/parts/level-1.png" alt="Level">
+        </div>
+
+        <button type="button" class="knob-hit knob-hit-time-h js-time-knob" aria-label="Change time signature">
+          <img class="js-time-knob-img" src="assets/home-vertical-v2/parts/knob-time.png" alt="">
+        </button>
+        <button type="button" class="knob-hit knob-hit-level-h js-level-knob" aria-label="Change level">
+          <img class="js-level-knob-img" src="assets/home-vertical-v2/parts/knob-level.png" alt="">
+        </button>
+
+        <div class="fig-grid js-fig-grid" data-layout="horizontal"></div>
+        <div class="pattern-slots js-pattern-slots" data-layout="horizontal"></div>
+
+        <button type="button" class="start-hit-h js-start-btn" aria-label="Start" disabled></button>
       </div>
 
       <p id="pool-warning" class="warning hidden">

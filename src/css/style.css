@@ -167,6 +167,30 @@ h1 {
   aspect-ratio: 852 / 1846;
 }
 
+/* Wide/desktop/LIM layout: a dedicated horizontal console photo (not the
+   vertical one reflowed) with its own coordinate set below. Hidden by
+   default; the media query near the bottom of this file swaps which of the
+   two consoles is visible based on viewport width. */
+.console-horizontal {
+  display: none;
+  max-width: 1100px;
+  aspect-ratio: 1338 / 704;
+}
+
+@media (min-width: 860px) {
+  #app {
+    max-width: 1180px;
+  }
+
+  .console-vertical {
+    display: none;
+  }
+
+  .console-horizontal {
+    display: block;
+  }
+}
+
 .console-bg {
   position: absolute;
   inset: 0;
@@ -200,6 +224,22 @@ h1 {
   top: 48.4%;
   width: 40.4%;
   height: 6.6%;
+}
+
+/* Horizontal console - percentages measured off
+   assets/home-horizontal-v1/home-horizontal-console.png (1338x704 canvas). */
+.readout-box-time-h {
+  left: 3.961%;
+  top: 17.045%;
+  width: 15.62%;
+  height: 13.21%;
+}
+
+.readout-box-level-h {
+  left: 80.942%;
+  top: 18.04%;
+  width: 14.798%;
+  height: 20.17%;
 }
 
 .knob-hit {
@@ -239,6 +279,29 @@ h1 {
   top: 57.61%;
   width: 19.48%;
   height: 8.72%;
+}
+
+/* Horizontal console knob sockets. Their aspect ratio doesn't quite match
+   the reused vertical knob-time.png/knob-level.png dial art (measured off a
+   differently-shaped socket), so unlike the vertical version these use
+   object-fit: contain to avoid stretching the dial. */
+.knob-hit-time-h {
+  left: 4.858%;
+  top: 32.67%;
+  width: 14.573%;
+  height: 23.438%;
+}
+
+.knob-hit-level-h {
+  left: 81.091%;
+  top: 39.062%;
+  width: 14.201%;
+  height: 22.727%;
+}
+
+.knob-hit-time-h img,
+.knob-hit-level-h img {
+  object-fit: contain;
 }
 
 /* The big idle screen doubles as the figure picker: tapping a note toggles
@@ -366,6 +429,33 @@ h1 {
 
 .start-icon-btn:disabled {
   filter: grayscale(1) brightness(0.6);
+  cursor: not-allowed;
+}
+
+/* Horizontal console: START is baked into the artwork (label + red button),
+   so this is just a transparent hit area over the drawn button, dimmed with
+   an overlay when disabled instead of swapping/filtering an image. */
+.start-hit-h {
+  position: absolute;
+  left: 84.305%;
+  top: 73.864%;
+  width: 7.474%;
+  height: 13.92%;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.08s, background 0.15s;
+}
+
+.start-hit-h:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.start-hit-h:disabled {
+  background: rgba(10, 13, 16, 0.55);
   cursor: not-allowed;
 }
 
