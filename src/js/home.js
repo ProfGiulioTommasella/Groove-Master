@@ -46,12 +46,15 @@ const PATTERN_SHARED = {
 // The 9 lever slots there have no baked-in LED, so the LED sits in the gap
 // to the slot's right, at the slot's vertical mid-height - side-by-side with
 // the lever, matching the layout worked out by hand in elementi-2.png.
-// Positions given directly by the console designer, measured in a Canva
-// project built at this exact asset's own 1338x704 resolution (no unit
-// conversion needed - straight px/canvas-size). Columns 1-6 were then
-// reported ~9px left of their slot lane (7-9 were spot-on) and nudged right
-// to match.
-const PATTERN_COLUMNS_H = [10.202, 18.058, 25.777, 33.580, 41.390, 49.127, 56.339, 64.149, 71.958]
+// Re-derived directly from this asset's own pixels rather than by further
+// eyeballed nudges: measured each of the 9 slot cutouts' true horizontal
+// center (column-luminance scan of the background art), measured where the
+// lever-up/lever-down art's own bright reflection line sits within its
+// rendered box, and solved leverLeft so the two align. This naturally
+// produced a smooth per-column correction (largest on the left, ~0 by
+// column 9) instead of the flat +9px nudge tried previously, which had
+// overshot columns 2-6 while happening to land column 1 right.
+const PATTERN_COLUMNS_H = [10.303, 18.001, 25.699, 33.472, 41.169, 48.867, 56.566, 64.339, 72.037]
   .map((leverLeft) => ({
     leverLeft,
     led: leverLeft + 3.887, // slot centers are ~104px apart; +52px lands mid-gap
