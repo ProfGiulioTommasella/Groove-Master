@@ -286,17 +286,17 @@ h1 {
    differently-shaped socket), so unlike the vertical version these use
    object-fit: contain to avoid stretching the dial. */
 .knob-hit-time-h {
-  left: 6.20%;
-  top: 34.52%;
+  left: 6.428%;
+  top: 35.938%;
   width: 11.81%;
-  height: 19.32%;
+  height: 19.318%;
 }
 
 .knob-hit-level-h {
-  left: 82.81%;
-  top: 41.91%;
+  left: 82.96%;
+  top: 43.75%;
   width: 11.21%;
-  height: 17.05%;
+  height: 17.045%;
 }
 
 .knob-hit-time-h img,

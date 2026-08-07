@@ -53,7 +53,7 @@ const PATTERN_COLUMNS_H = [9.492, 17.339, 25.187, 32.810, 40.583, 48.356, 56.129
   }));
 
 const PATTERN_SHARED_H = {
-  leverWidth: 2.541, leverUpTop: 66.62, leverDownTop: 69.32, leverHeight: 13.92,
+  leverWidth: 2.541, leverUpTop: 66.62, leverDownTop: 68.47, leverHeight: 13.92,
   ledTop: 74.36, ledWidth: 2.093, ledHeight: 3.977,
 };
 
