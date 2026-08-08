@@ -64,36 +64,63 @@
     </section>
 
     <section id="screen-game" class="screen hidden">
-      <div class="game-console" id="game-console">
+      <div class="game-console game-console-vertical" id="game-console">
         <img class="console-bg" src="assets/game-vertical-v2/PLANCIA VERT GAME OK - sfondo.png" alt="Groove Master">
 
         <div class="readout-box bpm-readout-box">
-          <img id="bpm-readout" src="assets/game-vertical-v2/parts/bpm-60.png" alt="60 BPM">
+          <img class="js-bpm-readout" src="assets/game-vertical-v2/parts/bpm-60.png" alt="60 BPM">
         </div>
-        <button type="button" class="bpm-icon-btn bpm-minus-btn" id="bpm-minus" aria-label="Decrease BPM">
+        <button type="button" class="bpm-icon-btn bpm-minus-btn js-bpm-minus" aria-label="Decrease BPM">
           <img src="assets/game-vertical-v2/parts/metronome-minus.png" alt="">
         </button>
-        <button type="button" class="bpm-icon-btn bpm-plus-btn" id="bpm-plus" aria-label="Increase BPM">
+        <button type="button" class="bpm-icon-btn bpm-plus-btn js-bpm-plus" aria-label="Increase BPM">
           <img src="assets/game-vertical-v2/parts/metronome-plus.png" alt="">
         </button>
 
-        <button type="button" class="metronome-toggle-btn" id="metronome-btn" aria-label="Start or stop the metronome">
-          <img id="metronome-btn-img" src="assets/game-vertical-v2/parts/metronome-start.png" alt="">
+        <button type="button" class="metronome-toggle-btn js-metronome-btn" aria-label="Start or stop the metronome">
+          <img class="js-metronome-btn-img" src="assets/game-vertical-v2/parts/metronome-start.png" alt="">
         </button>
 
         <div class="score-frame">
-          <div id="score" class="score"></div>
+          <div class="score js-score"></div>
         </div>
 
-        <button type="button" class="action-hit action-hit-1" id="refresh-btn" aria-label="Refresh the pattern"></button>
-        <button type="button" class="action-hit action-hit-2" id="tip-btn" aria-label="Toggle syllable tip"></button>
-        <button type="button" class="action-hit action-hit-3" id="listen-btn" aria-label="Listen to the pattern"></button>
-        <button type="button" class="action-hit action-hit-4" id="back-home" aria-label="Back to Home"></button>
+        <button type="button" class="action-hit action-hit-1 js-refresh-btn" aria-label="Refresh the pattern"></button>
+        <button type="button" class="action-hit action-hit-2 js-tip-btn" aria-label="Toggle syllable tip"></button>
+        <button type="button" class="action-hit action-hit-3 js-listen-btn" aria-label="Listen to the pattern"></button>
+        <button type="button" class="action-hit action-hit-4 js-back-home" aria-label="Back to Home"></button>
 
         <div class="action-icon action-icon-1"><img src="assets/game-vertical-v2/parts/btn-refresh.png" alt=""></div>
         <div class="action-icon action-icon-2"><img src="assets/game-vertical-v2/parts/btn-tip.png" alt=""></div>
         <div class="action-icon action-icon-3"><img src="assets/game-vertical-v2/parts/btn-listen.png" alt=""></div>
         <div class="action-icon action-icon-4"><img src="assets/game-vertical-v2/parts/btn-home.png" alt=""></div>
+      </div>
+
+      <div class="game-console game-console-horizontal" id="game-console-h">
+        <img class="console-bg" src="assets/game-horizontal-v1/game-horizontal-console.png" alt="Groove Master">
+
+        <div class="readout-box bpm-readout-box-h">
+          <img class="js-bpm-readout" src="assets/game-vertical-v2/parts/bpm-60.png" alt="60 BPM">
+        </div>
+        <button type="button" class="bpm-icon-btn bpm-minus-btn-h js-bpm-minus" aria-label="Decrease BPM">
+          <img src="assets/game-vertical-v2/parts/metronome-minus.png" alt="">
+        </button>
+        <button type="button" class="bpm-icon-btn bpm-plus-btn-h js-bpm-plus" aria-label="Increase BPM">
+          <img src="assets/game-vertical-v2/parts/metronome-plus.png" alt="">
+        </button>
+
+        <button type="button" class="metronome-toggle-btn-h js-metronome-btn" aria-label="Start or stop the metronome">
+          <img class="js-metronome-btn-img" src="assets/game-vertical-v2/parts/metronome-start.png" alt="">
+        </button>
+
+        <div class="score-frame-h">
+          <div class="score js-score"></div>
+        </div>
+
+        <button type="button" class="action-hit-h action-hit-h-1 js-tip-btn" aria-label="Toggle syllable tip"></button>
+        <button type="button" class="action-hit-h action-hit-h-2 js-listen-btn" aria-label="Listen to the pattern"></button>
+        <button type="button" class="action-hit-h action-hit-h-3 js-refresh-btn" aria-label="Refresh the pattern"></button>
+        <button type="button" class="action-hit-h action-hit-h-4 js-back-home" aria-label="Back to Home"></button>
       </div>
     </section>
   </main>

@@ -528,6 +528,24 @@ h1 {
   aspect-ratio: 1170 / 2532;
 }
 
+/* Wide/desktop/LIM layout - same technique as .console-horizontal on Home:
+   a dedicated horizontal console photo with its own coordinate set. */
+.game-console-horizontal {
+  display: none;
+  max-width: 1100px;
+  aspect-ratio: 1774 / 887;
+}
+
+@media (min-width: 860px) {
+  .game-console-vertical {
+    display: none;
+  }
+
+  .game-console-horizontal {
+    display: block;
+  }
+}
+
 /* BPM number: matched to where the minus/plus icon buttons flank it (their
    own printed position didn't line up with the number slot the design file
    specified, so this uses the empirical midpoint between them instead). */
@@ -564,6 +582,35 @@ h1 {
 .bpm-minus-btn { left: 13.85%; top: 19.12%; width: 12.39%; height: 5.13%; }
 .bpm-plus-btn { left: 74.36%; top: 19.04%; width: 12.14%; height: 5.06%; }
 
+/* Horizontal console - percentages measured off
+   assets/game-horizontal-v1/game-horizontal-console.png (1774x887 canvas).
+   The METRONOME column there is ordered +/-/toggle/screen top to bottom
+   (all 4 slots came out square except the bottom one, which is the wide
+   rectangle used for the BPM screen). */
+.bpm-readout-box-h {
+  left: 82.301%;
+  top: 71.59%;
+  width: 9.583%;
+  height: 13.529%;
+}
+
+.bpm-minus-btn-h { position: absolute; left: 83.99%; top: 29.876%; width: 6.201%; height: 10.147%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+.bpm-plus-btn-h { position: absolute; left: 83.99%; top: 43.404%; width: 6.201%; height: 10.147%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+
+.bpm-minus-btn-h img,
+.bpm-plus-btn-h img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.bpm-minus-btn-h:disabled,
+.bpm-plus-btn-h:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 /* A single toggle button (like the Home knobs, one graphic swapped by
    state) - the delivered art was one plate with both a play and a stop
    icon side by side, but a single physical button is easier to hit on a
@@ -589,6 +636,27 @@ h1 {
   pointer-events: none;
 }
 
+.metronome-toggle-btn-h {
+  position: absolute;
+  left: 83.99%;
+  top: 56.933%;
+  width: 6.201%;
+  height: 10.147%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.metronome-toggle-btn-h img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+}
+
 .score-frame {
   position: absolute;
   left: 7.35%;
@@ -599,6 +667,20 @@ h1 {
 }
 
 .score-frame .score {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.score-frame-h {
+  position: absolute;
+  left: 20.575%;
+  top: 21.984%;
+  width: 58.343%;
+  height: 67.643%;
+  display: flex;
+}
+
+.score-frame-h .score {
   flex: 1;
   overflow-y: auto;
 }
@@ -633,6 +715,35 @@ h1 {
 .action-hit-2 { left: 30.0%; top: 77.61%; }
 .action-hit-3 { left: 52.82%; top: 77.53%; }
 .action-hit-4 { left: 75.56%; top: 77.53%; }
+
+/* Horizontal console: the 4 UTILITIES slots (Tip/Listen/Refresh/Home already
+   printed on the art, top to bottom), same transparent-hit-area technique. */
+.action-hit-h {
+  position: absolute;
+  left: 8.455%;
+  width: 7.892%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.15s, background 0.15s;
+}
+
+.action-hit-h:hover,
+.action-hit-h:focus-visible {
+  background: rgba(0, 229, 255, 0.06);
+  outline: none;
+}
+
+.action-hit-h.active {
+  box-shadow: inset 0 0 0 2px var(--accent), 0 0 12px -3px var(--accent-glow);
+  background: rgba(0, 229, 255, 0.08);
+}
+
+.action-hit-h-1 { top: 31.567%; height: 9.02%; }
+.action-hit-h-2 { top: 45.096%; height: 8.457%; }
+.action-hit-h-3 { top: 58.625%; height: 8.457%; }
+.action-hit-h-4 { top: 72.154%; height: 8.457%; }
 
 /* Decorative icons sitting in the empty space above each button's printed
    label - purely visual, the .action-hit square underneath handles clicks. */
