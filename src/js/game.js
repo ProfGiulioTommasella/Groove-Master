@@ -115,7 +115,7 @@ function stopMetronome() {
   if (metronome && metronome.isRunning) {
     metronome.stop();
   }
-  metronomeBtnImgs.forEach((img) => { img.src = 'assets/game-vertical-v2/parts/metronome-start.png'; });
+  metronomeBtnImgs.forEach((img) => { img.src = img.dataset.startSrc; });
 }
 
 bpmMinuses.forEach((btn) => btn.addEventListener('click', () => {
@@ -145,7 +145,7 @@ metronomeBtns.forEach((btn) => btn.addEventListener('click', async () => {
   } else {
     stopListen();
     await metronome.start();
-    metronomeBtnImgs.forEach((img) => { img.src = 'assets/game-vertical-v2/parts/metronome-stop.png'; });
+    metronomeBtnImgs.forEach((img) => { img.src = img.dataset.stopSrc; });
   }
 }));
 

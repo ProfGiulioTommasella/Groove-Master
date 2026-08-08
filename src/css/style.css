@@ -594,8 +594,8 @@ h1 {
   height: 13.529%;
 }
 
-.bpm-minus-btn-h { position: absolute; left: 83.99%; top: 29.876%; width: 6.201%; height: 10.147%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
-.bpm-plus-btn-h { position: absolute; left: 83.99%; top: 43.404%; width: 6.201%; height: 10.147%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+.bpm-plus-btn-h { position: absolute; left: 84.766%; top: 31.387%; width: 5.755%; height: 10.09%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+.bpm-minus-btn-h { position: absolute; left: 84.693%; top: 44.601%; width: 5.829%; height: 10.226%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
 
 .bpm-minus-btn-h img,
 .bpm-plus-btn-h img {
@@ -638,10 +638,10 @@ h1 {
 
 .metronome-toggle-btn-h {
   position: absolute;
-  left: 83.99%;
-  top: 56.933%;
-  width: 6.201%;
-  height: 10.147%;
+  left: 84.693%;
+  top: 58.242%;
+  width: 5.902%;
+  height: 10.226%;
   background: transparent;
   border: none;
   padding: 0;
@@ -744,6 +744,27 @@ h1 {
 .action-hit-h-2 { top: 45.096%; height: 8.457%; }
 .action-hit-h-3 { top: 58.625%; height: 8.457%; }
 .action-hit-h-4 { top: 72.154%; height: 8.457%; }
+
+/* Decorative icons dropped in by the console designer, positioned by the
+   exact coordinates of their own source file (scaled from the 1338x704
+   project it was built in to this asset's 1774x887 canvas: x/1.32586,
+   y/1.25995) - purely visual, the .action-hit-h square underneath it
+   handles clicks. */
+.action-icon-h {
+  position: absolute;
+  pointer-events: none;
+}
+
+.action-icon-h img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.action-icon-h-1 { left: 9.72%; top: 33.386%; width: 4.635%; height: 8.242%; }
+.action-icon-h-2 { left: 9.72%; top: 47.305%; width: 4.635%; height: 8.242%; }
+.action-icon-h-3 { left: 9.72%; top: 61.522%; width: 4.635%; height: 8.096%; }
+.action-icon-h-4 { left: 9.72%; top: 75.716%; width: 4.635%; height: 8.242%; }
 
 /* Decorative icons sitting in the empty space above each button's printed
    label - purely visual, the .action-hit square underneath handles clicks. */
