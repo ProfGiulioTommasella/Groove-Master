@@ -190,6 +190,8 @@ h1 {
 
   .console-horizontal {
     display: block;
+    width: min(98vw, calc(90vh * 1338 / 704));
+    max-width: none;
     margin: 0 auto;
   }
 }
@@ -546,6 +548,7 @@ h1 {
   .game-console-horizontal {
     display: block;
     width: min(98vw, calc(92vh * 1774 / 887));
+    max-width: none;
     margin: 0 auto;
   }
 }
