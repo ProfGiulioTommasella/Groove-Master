@@ -167,6 +167,30 @@ h1 {
   aspect-ratio: 852 / 1846;
 }
 
+/* Wide/desktop/LIM layout: a dedicated horizontal console photo (not the
+   vertical one reflowed) with its own coordinate set below. Hidden by
+   default; the media query near the bottom of this file swaps which of the
+   two consoles is visible based on viewport width. */
+.console-horizontal {
+  display: none;
+  max-width: 1100px;
+  aspect-ratio: 1338 / 704;
+}
+
+@media (min-width: 860px) {
+  #app {
+    max-width: 1180px;
+  }
+
+  .console-vertical {
+    display: none;
+  }
+
+  .console-horizontal {
+    display: block;
+  }
+}
+
 .console-bg {
   position: absolute;
   inset: 0;
@@ -200,6 +224,22 @@ h1 {
   top: 48.4%;
   width: 40.4%;
   height: 6.6%;
+}
+
+/* Horizontal console - percentages measured off
+   assets/home-horizontal-v1/home-horizontal-console.png (1338x704 canvas). */
+.readout-box-time-h {
+  left: 3.961%;
+  top: 17.045%;
+  width: 15.62%;
+  height: 13.21%;
+}
+
+.readout-box-level-h {
+  left: 80.942%;
+  top: 18.04%;
+  width: 14.798%;
+  height: 20.17%;
 }
 
 .knob-hit {
@@ -239,6 +279,32 @@ h1 {
   top: 57.61%;
   width: 19.48%;
   height: 8.72%;
+}
+
+/* Horizontal console knob sockets. Their aspect ratio doesn't quite match
+   the reused vertical knob-time.png/knob-level.png dial art (measured off a
+   differently-shaped socket), so unlike the vertical version these use
+   object-fit: contain to avoid stretching the dial. */
+/* Positions given directly by the console designer (measured in Canva
+   against a 2535x1170 export of the console art), converted to this image's
+   own 1338x704 canvas the same way as PATTERN_COLUMNS_H in home.js. */
+.knob-hit-time-h {
+  left: 5.798%;
+  top: 35.746%;
+  width: 11.891%;
+  height: 22.089%;
+}
+
+.knob-hit-level-h {
+  left: 83.226%;
+  top: 42.108%;
+  width: 10.749%;
+  height: 19.97%;
+}
+
+.knob-hit-time-h img,
+.knob-hit-level-h img {
+  object-fit: contain;
 }
 
 /* The big idle screen doubles as the figure picker: tapping a note toggles
@@ -369,6 +435,33 @@ h1 {
   cursor: not-allowed;
 }
 
+/* Horizontal console: START is baked into the artwork (label + red button),
+   so this is just a transparent hit area over the drawn button, dimmed with
+   an overlay when disabled instead of swapping/filtering an image. */
+.start-hit-h {
+  position: absolute;
+  left: 84.305%;
+  top: 73.864%;
+  width: 7.474%;
+  height: 13.92%;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.08s, background 0.15s;
+}
+
+.start-hit-h:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.start-hit-h:disabled {
+  background: rgba(10, 13, 16, 0.55);
+  cursor: not-allowed;
+}
+
 .placeholder-note {
   color: var(--muted);
   font-style: italic;
@@ -435,6 +528,24 @@ h1 {
   aspect-ratio: 1170 / 2532;
 }
 
+/* Wide/desktop/LIM layout - same technique as .console-horizontal on Home:
+   a dedicated horizontal console photo with its own coordinate set. */
+.game-console-horizontal {
+  display: none;
+  max-width: 1100px;
+  aspect-ratio: 1774 / 887;
+}
+
+@media (min-width: 860px) {
+  .game-console-vertical {
+    display: none;
+  }
+
+  .game-console-horizontal {
+    display: block;
+  }
+}
+
 /* BPM number: matched to where the minus/plus icon buttons flank it (their
    own printed position didn't line up with the number slot the design file
    specified, so this uses the empirical midpoint between them instead). */
@@ -471,6 +582,35 @@ h1 {
 .bpm-minus-btn { left: 13.85%; top: 19.12%; width: 12.39%; height: 5.13%; }
 .bpm-plus-btn { left: 74.36%; top: 19.04%; width: 12.14%; height: 5.06%; }
 
+/* Horizontal console - percentages measured off
+   assets/game-horizontal-v1/game-horizontal-console.png (1774x887 canvas).
+   The METRONOME column there is ordered +/-/toggle/screen top to bottom
+   (all 4 slots came out square except the bottom one, which is the wide
+   rectangle used for the BPM screen). */
+.bpm-readout-box-h {
+  left: 83.427%;
+  top: 72.266%;
+  width: 9.583%;
+  height: 13.529%;
+}
+
+.bpm-plus-btn-h { position: absolute; left: 85.175%; top: 31.229%; width: 4.904%; height: 9.132%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+.bpm-minus-btn-h { position: absolute; left: 85.147%; top: 45.209%; width: 4.961%; height: 9.245%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+
+.bpm-minus-btn-h img,
+.bpm-plus-btn-h img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.bpm-minus-btn-h:disabled,
+.bpm-plus-btn-h:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 /* A single toggle button (like the Home knobs, one graphic swapped by
    state) - the delivered art was one plate with both a play and a stop
    icon side by side, but a single physical button is easier to hit on a
@@ -496,6 +636,27 @@ h1 {
   pointer-events: none;
 }
 
+.metronome-toggle-btn-h {
+  position: absolute;
+  left: 85.118%;
+  top: 59.526%;
+  width: 5.017%;
+  height: 9.245%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.metronome-toggle-btn-h img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+}
+
 .score-frame {
   position: absolute;
   left: 7.35%;
@@ -506,6 +667,20 @@ h1 {
 }
 
 .score-frame .score {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.score-frame-h {
+  position: absolute;
+  left: 20.575%;
+  top: 21.984%;
+  width: 58.343%;
+  height: 67.643%;
+  display: flex;
+}
+
+.score-frame-h .score {
   flex: 1;
   overflow-y: auto;
 }
@@ -540,6 +715,56 @@ h1 {
 .action-hit-2 { left: 30.0%; top: 77.61%; }
 .action-hit-3 { left: 52.82%; top: 77.53%; }
 .action-hit-4 { left: 75.56%; top: 77.53%; }
+
+/* Horizontal console: the 4 UTILITIES slots (Tip/Listen/Refresh/Home already
+   printed on the art, top to bottom), same transparent-hit-area technique. */
+.action-hit-h {
+  position: absolute;
+  left: 8.455%;
+  width: 7.892%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.15s, background 0.15s;
+}
+
+.action-hit-h:hover,
+.action-hit-h:focus-visible {
+  background: rgba(0, 229, 255, 0.06);
+  outline: none;
+}
+
+.action-hit-h.active {
+  box-shadow: inset 0 0 0 2px var(--accent), 0 0 12px -3px var(--accent-glow);
+  background: rgba(0, 229, 255, 0.08);
+}
+
+.action-hit-h-1 { top: 31.567%; height: 9.02%; }
+.action-hit-h-2 { top: 45.096%; height: 8.457%; }
+.action-hit-h-3 { top: 58.625%; height: 8.457%; }
+.action-hit-h-4 { top: 72.154%; height: 8.457%; }
+
+/* Decorative icons dropped in by the console designer, positioned by the
+   exact coordinates of their own source file (scaled from the 1338x704
+   project it was built in to this asset's 1774x887 canvas: x/1.32586,
+   y/1.25995) - purely visual, the .action-hit-h square underneath it
+   handles clicks. */
+.action-icon-h {
+  position: absolute;
+  pointer-events: none;
+}
+
+.action-icon-h img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.action-icon-h-1 { left: 9.826%; top: 32.667%; width: 4.482%; height: 8.354%; }
+.action-icon-h-2 { left: 9.826%; top: 47.204%; width: 4.482%; height: 8.354%; }
+.action-icon-h-3 { left: 9.826%; top: 61.86%; width: 4.482%; height: 8.354%; }
+.action-icon-h-4 { left: 9.899%; top: 77.101%; width: 4.482%; height: 8.354%; }
 
 /* Decorative icons sitting in the empty space above each button's printed
    label - purely visual, the .action-hit square underneath handles clicks. */

@@ -41,10 +41,35 @@ const PATTERN_SHARED = {
   leverDownTop: 79.198, leverDownWidth: 4.225, leverDownHeight: 7.313,
 };
 
+// Same idea, measured off the horizontal console artwork instead
+// (assets/home-horizontal-v1/home-horizontal-console.png, 1338x704 canvas).
+// The 9 lever slots there have no baked-in LED, so the LED sits in the gap
+// to the slot's right, at the slot's vertical mid-height - side-by-side with
+// the lever, matching the layout worked out by hand in elementi-2.png.
+// Re-derived directly from this asset's own pixels rather than by further
+// eyeballed nudges: measured each of the 9 slot cutouts' true horizontal
+// center (column-luminance scan of the background art), measured where the
+// lever-up/lever-down art's own bright reflection line sits within its
+// rendered box, and solved leverLeft so the two align. This naturally
+// produced a smooth per-column correction (largest on the left, ~0 by
+// column 9) instead of the flat +9px nudge tried previously, which had
+// overshot columns 2-6 while happening to land column 1 right.
+const PATTERN_COLUMNS_H = [10.303, 18.001, 25.699, 33.472, 41.169, 48.867, 56.566, 64.339, 72.037]
+  .map((leverLeft) => ({
+    leverLeft,
+    led: leverLeft + 3.887, // slot centers are ~104px apart; +52px lands mid-gap
+  }));
+
+const PATTERN_SHARED_H = {
+  leverWidth: 2.205, leverUpTop: 64.375, leverDownTop: 74.318, leverHeight: 15.682,
+  ledTop: 74.36, ledWidth: 2.093, ledHeight: 3.977,
+};
+
 // The big idle screen's usable inner area (percent of the console box),
 // measured off the artwork, divided into a 3x3 grid for the 9 tappable
 // figure icons.
 const FIG_SCREEN = { left: 10.56, top: 16.25, width: 79.23, height: 26 };
+const FIG_SCREEN_H = { left: 23.916, top: 21.307, width: 50.822, height: 36.932 };
 const FIG_COLS = 3;
 const FIG_ROWS = 3;
 
@@ -71,45 +96,56 @@ export function initHome() {
   // both on first load and whenever Home is shown again; only BPM persists.
   applyHomeDefaults(state);
 
-  const timeKnob = document.getElementById('time-knob');
-  const levelKnob = document.getElementById('level-knob');
-  const timeKnobImg = document.getElementById('time-knob-img');
-  const levelKnobImg = document.getElementById('level-knob-img');
-  const timeReadout = document.getElementById('time-readout');
-  const levelReadout = document.getElementById('level-readout');
-  const figGrid = document.getElementById('fig-grid');
-  const patternSlots = document.getElementById('pattern-slots');
+  const timeReadouts = document.querySelectorAll('.js-time-readout');
+  const levelReadouts = document.querySelectorAll('.js-level-readout');
+  const timeKnobImgs = document.querySelectorAll('.js-time-knob-img');
+  const levelKnobImgs = document.querySelectorAll('.js-level-knob-img');
+  const timeKnobs = document.querySelectorAll('.js-time-knob');
+  const levelKnobs = document.querySelectorAll('.js-level-knob');
+  const figGrids = document.querySelectorAll('.js-fig-grid');
+  const patternSlotsEls = document.querySelectorAll('.js-pattern-slots');
   const poolWarning = document.getElementById('pool-warning');
-  const startBtn = document.getElementById('start-btn');
+  const startBtns = document.querySelectorAll('.js-start-btn');
 
   function persist() {
     saveState(state);
   }
 
   function refreshTimeUI() {
-    timeReadout.src = `${PARTS}time-${state.time}.png`;
-    timeReadout.alt = `Time signature ${state.time}/4`;
-    timeKnobImg.style.transform = `rotate(${TIME_KNOB_ROTATION[state.time]}deg)`;
+    timeReadouts.forEach((img) => {
+      img.src = `${PARTS}time-${state.time}.png`;
+      img.alt = `Time signature ${state.time}/4`;
+    });
+    timeKnobImgs.forEach((img) => {
+      img.style.transform = `rotate(${TIME_KNOB_ROTATION[state.time]}deg)`;
+    });
   }
 
   function refreshLevelUI() {
     const matchedLevel = findPresetLevel(state.pool);
     const shown = matchedLevel ?? 9;
-    levelReadout.src = `${PARTS}level-${shown}.png`;
-    levelReadout.alt = matchedLevel ? `Level ${matchedLevel}` : 'Level: Custom';
-    levelKnobImg.style.transform = `rotate(${LEVEL_KNOB_ROTATION[shown]}deg)`;
+    levelReadouts.forEach((img) => {
+      img.src = `${PARTS}level-${shown}.png`;
+      img.alt = matchedLevel ? `Level ${matchedLevel}` : 'Level: Custom';
+    });
+    levelKnobImgs.forEach((img) => {
+      img.style.transform = `rotate(${LEVEL_KNOB_ROTATION[shown]}deg)`;
+    });
   }
 
   function refreshStartUI() {
     const valid = isPoolValid(state.pool);
-    startBtn.disabled = !valid;
+    startBtns.forEach((btn) => {
+      btn.disabled = !valid;
+    });
     poolWarning.classList.toggle('hidden', valid);
   }
 
-  function renderFigGrid() {
-    figGrid.innerHTML = '';
-    const cellWidth = FIG_SCREEN.width / FIG_COLS;
-    const cellHeight = FIG_SCREEN.height / FIG_ROWS;
+  function renderFigGrid(container) {
+    const screen = container.dataset.layout === 'horizontal' ? FIG_SCREEN_H : FIG_SCREEN;
+    container.innerHTML = '';
+    const cellWidth = screen.width / FIG_COLS;
+    const cellHeight = screen.height / FIG_ROWS;
     PATTERN_FIGURE_IDS.forEach((figureId, index) => {
       const engaged = state.pool.includes(figureId);
       const figure = figureById(figureId);
@@ -121,8 +157,8 @@ export function initHome() {
 
       const col = index % FIG_COLS;
       const row = Math.floor(index / FIG_COLS);
-      btn.style.left = `${FIG_SCREEN.left + col * cellWidth}%`;
-      btn.style.top = `${FIG_SCREEN.top + row * cellHeight}%`;
+      btn.style.left = `${screen.left + col * cellWidth}%`;
+      btn.style.top = `${screen.top + row * cellHeight}%`;
       btn.style.width = `${cellWidth}%`;
       btn.style.height = `${cellHeight}%`;
 
@@ -140,32 +176,32 @@ export function initHome() {
           state.pool.splice(state.pool.indexOf(figureId), 1);
         }
         refreshLevelUI();
-        renderFigGrid();
-        renderPatternSlots();
+        renderAllFigGrids();
+        renderAllPatternSlots();
         refreshStartUI();
         persist();
       });
 
-      figGrid.appendChild(btn);
+      container.appendChild(btn);
     });
+  }
+
+  function renderAllFigGrids() {
+    figGrids.forEach(renderFigGrid);
   }
 
   // The physical switches are a pure visual readout of the pool - they
   // mirror renderFigGrid()'s state but aren't clickable themselves (a
   // 9-lever row is too small a target on a phone; the big screen above is
   // the actual control surface).
-  function renderPatternSlots() {
-    patternSlots.innerHTML = '';
+  function renderPatternSlots(container) {
+    const horizontal = container.dataset.layout === 'horizontal';
+    container.innerHTML = '';
     PATTERN_FIGURE_IDS.forEach((figureId, index) => {
       const engaged = state.pool.includes(figureId);
-      const col = PATTERN_COLUMNS[index];
 
       const led = document.createElement('div');
       led.className = 'pattern-slot-led';
-      led.style.left = `${col.led}%`;
-      led.style.top = `${PATTERN_SHARED.ledTop}%`;
-      led.style.width = `${PATTERN_SHARED.ledWidth}%`;
-      led.style.height = `${PATTERN_SHARED.ledHeight}%`;
       const ledImg = document.createElement('img');
       ledImg.src = `${PARTS}led-${engaged ? 'blue' : 'red'}.png`;
       ledImg.alt = '';
@@ -173,47 +209,77 @@ export function initHome() {
 
       const lever = document.createElement('div');
       lever.className = 'pattern-slot-lever';
-      const leverLeft = engaged ? col.leverUp : col.leverDown;
-      const leverTop = engaged ? PATTERN_SHARED.leverUpTop : PATTERN_SHARED.leverDownTop;
-      const leverWidth = engaged ? PATTERN_SHARED.leverUpWidth : PATTERN_SHARED.leverDownWidth;
-      const leverHeight = engaged ? PATTERN_SHARED.leverUpHeight : PATTERN_SHARED.leverDownHeight;
-      lever.style.left = `${leverLeft}%`;
-      lever.style.top = `${leverTop}%`;
-      lever.style.width = `${leverWidth}%`;
-      lever.style.height = `${leverHeight}%`;
       const leverImg = document.createElement('img');
       leverImg.src = `${PARTS}lever-${engaged ? 'up' : 'down'}.png`;
       leverImg.alt = '';
       lever.appendChild(leverImg);
 
-      patternSlots.append(led, lever);
+      if (horizontal) {
+        const col = PATTERN_COLUMNS_H[index];
+        led.style.left = `${col.led}%`;
+        led.style.top = `${PATTERN_SHARED_H.ledTop}%`;
+        led.style.width = `${PATTERN_SHARED_H.ledWidth}%`;
+        led.style.height = `${PATTERN_SHARED_H.ledHeight}%`;
+
+        lever.style.left = `${col.leverLeft}%`;
+        lever.style.top = `${engaged ? PATTERN_SHARED_H.leverUpTop : PATTERN_SHARED_H.leverDownTop}%`;
+        lever.style.width = `${PATTERN_SHARED_H.leverWidth}%`;
+        lever.style.height = `${PATTERN_SHARED_H.leverHeight}%`;
+      } else {
+        const col = PATTERN_COLUMNS[index];
+        led.style.left = `${col.led}%`;
+        led.style.top = `${PATTERN_SHARED.ledTop}%`;
+        led.style.width = `${PATTERN_SHARED.ledWidth}%`;
+        led.style.height = `${PATTERN_SHARED.ledHeight}%`;
+
+        const leverLeft = engaged ? col.leverUp : col.leverDown;
+        const leverTop = engaged ? PATTERN_SHARED.leverUpTop : PATTERN_SHARED.leverDownTop;
+        const leverWidth = engaged ? PATTERN_SHARED.leverUpWidth : PATTERN_SHARED.leverDownWidth;
+        const leverHeight = engaged ? PATTERN_SHARED.leverUpHeight : PATTERN_SHARED.leverDownHeight;
+        lever.style.left = `${leverLeft}%`;
+        lever.style.top = `${leverTop}%`;
+        lever.style.width = `${leverWidth}%`;
+        lever.style.height = `${leverHeight}%`;
+      }
+
+      container.append(led, lever);
     });
   }
 
-  timeKnob.addEventListener('click', () => {
-    playTimeKnobClick();
-    const index = TIME_SIGNATURES.indexOf(state.time);
-    state.time = TIME_SIGNATURES[(index + 1) % TIME_SIGNATURES.length];
-    refreshTimeUI();
-    persist();
+  function renderAllPatternSlots() {
+    patternSlotsEls.forEach(renderPatternSlots);
+  }
+
+  timeKnobs.forEach((knob) => {
+    knob.addEventListener('click', () => {
+      playTimeKnobClick();
+      const index = TIME_SIGNATURES.indexOf(state.time);
+      state.time = TIME_SIGNATURES[(index + 1) % TIME_SIGNATURES.length];
+      refreshTimeUI();
+      persist();
+    });
   });
 
-  levelKnob.addEventListener('click', () => {
-    playLevelKnobClick();
-    state.level = state.level >= MAX_LEVEL ? MIN_LEVEL : state.level + 1;
-    state.pool = [...PRESETS[state.level]];
-    refreshLevelUI();
-    renderFigGrid();
-    renderPatternSlots();
-    refreshStartUI();
-    persist();
+  levelKnobs.forEach((knob) => {
+    knob.addEventListener('click', () => {
+      playLevelKnobClick();
+      state.level = state.level >= MAX_LEVEL ? MIN_LEVEL : state.level + 1;
+      state.pool = [...PRESETS[state.level]];
+      refreshLevelUI();
+      renderAllFigGrids();
+      renderAllPatternSlots();
+      refreshStartUI();
+      persist();
+    });
   });
 
-  startBtn.addEventListener('click', () => {
-    if (!isPoolValid(state.pool)) return;
-    playUIClick();
-    persist();
-    startGame(state);
+  startBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!isPoolValid(state.pool)) return;
+      playUIClick();
+      persist();
+      startGame(state);
+    });
   });
 
   registerHomeReset(() => {
@@ -221,14 +287,14 @@ export function initHome() {
     persist();
     refreshTimeUI();
     refreshLevelUI();
-    renderFigGrid();
-    renderPatternSlots();
+    renderAllFigGrids();
+    renderAllPatternSlots();
     refreshStartUI();
   });
 
   refreshTimeUI();
   refreshLevelUI();
-  renderFigGrid();
-  renderPatternSlots();
+  renderAllFigGrids();
+  renderAllPatternSlots();
   refreshStartUI();
 }
