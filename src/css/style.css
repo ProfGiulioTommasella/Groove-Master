@@ -588,14 +588,14 @@ h1 {
    (all 4 slots came out square except the bottom one, which is the wide
    rectangle used for the BPM screen). */
 .bpm-readout-box-h {
-  left: 82.301%;
-  top: 71.59%;
+  left: 83.427%;
+  top: 72.266%;
   width: 9.583%;
   height: 13.529%;
 }
 
-.bpm-plus-btn-h { position: absolute; left: 84.766%; top: 31.387%; width: 5.755%; height: 10.09%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
-.bpm-minus-btn-h { position: absolute; left: 84.693%; top: 44.601%; width: 5.829%; height: 10.226%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+.bpm-plus-btn-h { position: absolute; left: 85.175%; top: 31.229%; width: 4.904%; height: 9.132%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
+.bpm-minus-btn-h { position: absolute; left: 85.147%; top: 45.209%; width: 4.961%; height: 9.245%; background: transparent; border: none; padding: 0; cursor: pointer; outline: none; }
 
 .bpm-minus-btn-h img,
 .bpm-plus-btn-h img {
@@ -638,10 +638,10 @@ h1 {
 
 .metronome-toggle-btn-h {
   position: absolute;
-  left: 84.693%;
-  top: 58.242%;
-  width: 5.902%;
-  height: 10.226%;
+  left: 85.118%;
+  top: 59.526%;
+  width: 5.017%;
+  height: 9.245%;
   background: transparent;
   border: none;
   padding: 0;
