@@ -761,10 +761,10 @@ h1 {
   display: block;
 }
 
-.action-icon-h-1 { left: 9.72%; top: 33.386%; width: 4.635%; height: 8.242%; }
-.action-icon-h-2 { left: 9.72%; top: 47.305%; width: 4.635%; height: 8.242%; }
-.action-icon-h-3 { left: 9.72%; top: 61.522%; width: 4.635%; height: 8.096%; }
-.action-icon-h-4 { left: 9.72%; top: 75.716%; width: 4.635%; height: 8.242%; }
+.action-icon-h-1 { left: 9.826%; top: 32.667%; width: 4.482%; height: 8.354%; }
+.action-icon-h-2 { left: 9.826%; top: 47.204%; width: 4.482%; height: 8.354%; }
+.action-icon-h-3 { left: 9.826%; top: 61.86%; width: 4.482%; height: 8.354%; }
+.action-icon-h-4 { left: 9.899%; top: 77.101%; width: 4.482%; height: 8.354%; }
 
 /* Decorative icons sitting in the empty space above each button's printed
    label - purely visual, the .action-hit square underneath handles clicks. */

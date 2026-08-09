@@ -32,7 +32,7 @@ const backHomeBtns = document.querySelectorAll('.js-back-home');
 
 function refreshBpmUI() {
   bpmReadouts.forEach((img) => {
-    img.src = `assets/game-vertical-v2/parts/bpm-${currentState.bpm}.png`;
+    img.src = img.dataset.srcTemplate.replace('{bpm}', currentState.bpm);
     img.alt = `${currentState.bpm} BPM`;
   });
   bpmMinuses.forEach((btn) => { btn.disabled = currentState.bpm <= BPM_MIN; });
