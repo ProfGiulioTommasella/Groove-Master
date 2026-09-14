@@ -175,6 +175,12 @@ export function initHome() {
         } else {
           state.pool.splice(state.pool.indexOf(figureId), 1);
         }
+        // Custom pools only contain figures with a switch (ids 3+).
+        // Ids 1-2 (half note/rest) are silently inherited from the last preset
+        // and must be stripped once the user departs from any preset combination.
+        if (findPresetLevel(state.pool) === null) {
+          state.pool = state.pool.filter(id => id >= 3);
+        }
         refreshLevelUI();
         renderAllFigGrids();
         renderAllPatternSlots();
