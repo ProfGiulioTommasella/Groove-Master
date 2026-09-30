@@ -553,11 +553,17 @@ h1 {
   }
 
   .game-console-horizontal .figure-img {
-    height: 80px;
+    height: 65px;
   }
 }
 
 @media (min-width: 1440px) {
+  .game-console-horizontal .figure-img {
+    height: 90px;
+  }
+}
+
+@media (min-width: 1920px) {
   .game-console-horizontal .figure-img {
     height: 110px;
   }
