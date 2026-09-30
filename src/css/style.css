@@ -727,8 +727,8 @@ h1 {
    printed on the art, top to bottom), same transparent-hit-area technique. */
 .action-hit-h {
   position: absolute;
-  left: 8.455%;
-  width: 7.892%;
+  left: 9.826%;
+  width: 4.482%;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 10px;
@@ -747,10 +747,10 @@ h1 {
   background: rgba(0, 229, 255, 0.08);
 }
 
-.action-hit-h-1 { top: 31.567%; height: 9.02%; }
-.action-hit-h-2 { top: 45.096%; height: 8.457%; }
-.action-hit-h-3 { top: 58.625%; height: 8.457%; }
-.action-hit-h-4 { top: 72.154%; height: 8.457%; }
+.action-hit-h-1 { top: 32.667%; height: 8.354%; }
+.action-hit-h-2 { top: 47.204%; height: 8.354%; }
+.action-hit-h-3 { top: 61.86%;  height: 8.354%; }
+.action-hit-h-4 { left: 9.899%; top: 77.101%; height: 8.354%; }
 
 /* Decorative icons dropped in by the console designer, positioned by the
    exact coordinates of their own source file (scaled from the 1338x704
