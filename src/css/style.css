@@ -551,6 +551,22 @@ h1 {
     max-width: none;
     margin: 0 auto;
   }
+
+  .game-console-horizontal .figure-img {
+    height: 65px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .game-console-horizontal .figure-img {
+    height: 90px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .game-console-horizontal .figure-img {
+    height: 110px;
+  }
 }
 
 /* BPM number: matched to where the minus/plus icon buttons flank it (their
