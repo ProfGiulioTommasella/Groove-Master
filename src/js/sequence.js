@@ -1,8 +1,19 @@
 // 4-bar sequence generation — see docs/spec-groove-master.md §5.
 import { figureById } from './figures.js';
 
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+// Figures whose pattern starts with '.' are rests; give them lower weight
+// so they appear less often than note figures (70 vs 100).
+const REST_WEIGHT = 0.7;
+
+function pickWeighted(arr) {
+  const weights = arr.map(id => (figureById(id).pattern[0] === '.' ? REST_WEIGHT : 1.0));
+  const total = weights.reduce((s, w) => s + w, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < arr.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return arr[i];
+  }
+  return arr[arr.length - 1];
 }
 
 // One bar is a list of cells (figure id + how many movements it occupies).
@@ -17,7 +28,7 @@ function generateBar(pool, time) {
     // Rule §5.2: a two-movement figure can never land on the bar's last
     // movement, so it's only a candidate while more than 2 movements remain.
     const candidates = remaining > 2 ? [...oneMovers, ...twoMovers] : oneMovers;
-    const figureId = pickRandom(candidates);
+    const figureId = pickWeighted(candidates);
     const movements = figureById(figureId).movements;
     cells.push({ figureId, movements });
     remaining -= movements;
